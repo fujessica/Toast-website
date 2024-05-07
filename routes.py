@@ -12,8 +12,7 @@ def home():
     cursor = connection.cursor()
     cursor.execute('SELECT toast.description, review, username FROM Reviews JOIN Toast ON reviews.toast_id = toast.id JOIN Users ON reviews.user_id = users.id')
     reviews = cursor.fetchall()
-    for item in reviews:
-        return (f"{item[0]:<25}{item[1]:<45}{item[2]:<20}")
+    return (reviews) and render_template("home.html", reviews = reviews)
 
 
 @app.route('/signup')
