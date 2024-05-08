@@ -8,27 +8,29 @@ app = Flask(__name__)
 
 @app.route('/home')
 def home():
-    connection = sqlite3.connect('toast.db')
-    cursor = connection.cursor()
-    cursor.execute('SELECT toast.description, review, username FROM Reviews JOIN Toast ON reviews.toast_id = toast.id JOIN Users ON reviews.user_id = users.id')
-    reviews = cursor.fetchall()
-    return (reviews) and render_template("home.html", reviews = reviews)
-
+    return 'home'
 
 @app.route('/signup')
 def create_user():
     return 'among'
 
 
-@app.route('/login')
-def login():
-    return "hallo"
+@app.route('/myreviews')
+def user_reviews():
+    connection = sqlite3.connect('toast.db')
+    cursor = connection.cursor()
+    cursor.execute("SELECT review FROM reviews WHERE user_id = '1'")
+    reviews = cursor.fetchall()
+    return render_template('myreviews.html', reviews = reviews)
 
 
 @app.route('/reviews')
-def show_reviews():
-    return "amongus"
-
+def show_all_reviews():
+    connection = sqlite3.connect('toast.db')
+    cursor = connection.cursor()
+    cursor.execute('SELECT toast.description, review, username FROM Reviews JOIN Toast ON reviews.toast_id = toast.id JOIN Users ON reviews.user_id = users.id')
+    reviews = cursor.fetchall()
+    return  render_template("reviews.html", reviews = reviews)
 
 
 
