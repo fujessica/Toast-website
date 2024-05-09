@@ -10,9 +10,9 @@ app = Flask(__name__)
 def home():
     return 'home'
 
-@app.route('/signup')
+@app.route('/login')
 def create_user():
-    return 'among'
+    return(render_template('login.html'))
 
 
 @app.route('/myreviews')

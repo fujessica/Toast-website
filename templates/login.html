@@ -17,11 +17,17 @@
         </nav>
 
         <main>
-            {%for review in reviews%}
-            <br>{{review[0]}}<br>
-            {{review[1]}}<br>
-            {{review[2]}}<br><br>
-            {%endfor%}
+            <form id = "login" action = "/xxx.php">
+                Username: <input type = "text" name = "username"><br>
+                Password: <input type = "text" name = "password"><br>
+                <input type ="button" onclick = 'myFunction()' value = submit>
+
+                <script>
+                    function myFunction(){
+                        document.getElementById("login").submit();
+                    }
+                </script>
+            </form>
         </main>
         </main>
 
