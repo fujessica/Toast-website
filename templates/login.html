@@ -1,39 +1,13 @@
-<!DOCTYPE html>
-<html>
+{% block body %}
+{% if session['logged_in'] %}
 
-    <head>
-        <title>
-            My Site
-        </title>
-    </head>
+You're logged in already!
 
-    <body>
-        <header>
-            <h1> The header</h1>
-        </header>
-
-        <nav>
-            NAVBAR
-        </nav>
-
-        <main>
-            <form id = "login" action = "/xxx.php">
-                Username: <input type = "text" name = "username"><br>
-                Password: <input type = "text" name = "password"><br>
-                <input type ="button" onclick = 'myFunction()' value = submit>
-
-                <script>
-                    function myFunction(){
-                        document.getElementById("login").submit();
-                    }
-                </script>
-            </form>
-        </main>
-        </main>
-
-        <footer>
-            <p>the footer</p>
-        </footer>
-    </body>
-
-</html>
+{% else %}
+<form action="/login" method="POST">
+  <input type="username" name="username" placeholder="Username">
+  <input type="password" name="password" placeholder="Password">
+  <input type="submit" value="Log in">
+</form>
+{% endif %}
+{% endblock %}

@@ -1,18 +1,29 @@
-from flask import Flask, render_template
+from flask import Flask, flash, redirect, render_template, request, session, abort
 import sqlite3
 
-
 app = Flask(__name__)
+app.secret_key = "super secret key"
 
 @app.route('/')
 
 @app.route('/home')
 def home():
-    return 'home'
+    if not session.get('logged_in'):
+        return render_template('login.html')
+    else:
+        return "Hello Boss!"
 
-@app.route('/login')
-def create_user():
-    return(render_template('login.html'))
+# @app.route('/login')
+# def create_user():
+#     return(render_template('login.html'))
+
+@app.route('/login', methods=['POST'])
+def do_admin_login():
+    if request.form['password'] == 'password' and request.form['username'] == 'admin':
+        session['logged_in'] = True
+    else:
+        flash('wrong password!')
+    return home()
 
 
 @app.route('/myreviews')
