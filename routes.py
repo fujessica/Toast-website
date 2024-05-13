@@ -4,8 +4,6 @@ import sqlite3
 app = Flask(__name__)
 app.secret_key = "super secret key"
 
-@app.route('/')
-
 @app.route('/home')
 def home():
     if not session.get('logged_in'):
@@ -13,14 +11,16 @@ def home():
     else:
         return "Hello Boss!"
 
-# @app.route('/login')
-# def create_user():
-#     return(render_template('login.html'))
 
 @app.route('/login', methods=['POST'])
 def do_admin_login():
+    connection = sqlite3.connect('toast.db')
+    cursor = connection.cursor()
+    cursor.execute("SELECT password FROM users WHERE username = 'jessicafu16'")
     if request.form['password'] == 'password' and request.form['username'] == 'admin':
         session['logged_in'] = True
+        username = str(request.form['username'])
+        return username
     else:
         flash('wrong password!')
     return home()
@@ -28,11 +28,14 @@ def do_admin_login():
 
 @app.route('/myreviews')
 def user_reviews():
-    connection = sqlite3.connect('toast.db')
-    cursor = connection.cursor()
-    cursor.execute("SELECT review FROM reviews WHERE user_id = '1'")
-    reviews = cursor.fetchall()
-    return render_template('myreviews.html', reviews = reviews)
+    if not session.get('logged_in'):
+        return render_template('login.html')
+    else:
+        connection = sqlite3.connect('toast.db')
+        cursor = connection.cursor()
+        cursor.execute("SELECT review FROM reviews WHERE user_id = '1'")
+        reviews = cursor.fetchall()
+        return render_template('myreviews.html', reviews = reviews)
 
 
 @app.route('/reviews')

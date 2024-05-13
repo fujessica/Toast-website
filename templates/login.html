@@ -1,13 +1,21 @@
-{% block body %}
-{% if session['logged_in'] %}
+<!DOCTYPE html>
 
-You're logged in already!
+<head>
+amongus
+</head>
 
-{% else %}
-<form action="/login" method="POST">
-  <input type="username" name="username" placeholder="Username">
-  <input type="password" name="password" placeholder="Password">
-  <input type="submit" value="Log in">
-</form>
-{% endif %}
-{% endblock %}
+<body>
+  {% block body %}
+  {% if session['logged_in'] %}
+
+  You're logged in already!
+
+  {% else %}
+  <form action="/login" method="POST">
+    <input type="username" name="username" placeholder="Username">
+    <input type="password" name="password" placeholder="Password">
+    <input type="submit" value="Log in">
+  </form>
+  {% endif %}
+  {% endblock %}
+</body>
