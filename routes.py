@@ -9,21 +9,23 @@ def home():
     if not session.get('logged_in'):
         return render_template('login.html')
     else:
-        return "Hello Boss!"
+        return "hallo"
 
 
 @app.route('/login', methods=['POST'])
 def do_admin_login():
-    connection = sqlite3.connect('toast.db')
-    cursor = connection.cursor()
-    cursor.execute("SELECT password FROM users WHERE username = 'jessicafu16'")
-    if request.form['password'] == 'password' and request.form['username'] == 'admin':
-        session['logged_in'] = True
-        username = str(request.form['username'])
-        return username
-    else:
-        flash('wrong password!')
-    return home()
+        password = request.form['password'] 
+        username = request.form['username']
+        connection = sqlite3.connect('toast.db')
+        cursor = connection.cursor()
+        cursor.execute("SELECT password FROM users WHERE username = '{}'".format(username))
+        key = cursor.fetchone()
+        if key[0] == password:   
+            session['logged_in'] = True
+            return(home())
+        else:
+            return 'wrong password!'
+
 
 
 @app.route('/myreviews')
