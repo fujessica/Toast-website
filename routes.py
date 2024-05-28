@@ -9,6 +9,9 @@ app.secret_key = "super secret key"
 def home():
     if not session.get('logged_in'):
         return render_template('signup.html')
+    elif Flag == True:
+        text = 'this username is taken'
+        return render_template('signup.html', text = text)
     else:
         return render_template('myreviews.html')
     
@@ -30,7 +33,9 @@ def signup():
     cursor.execute("SELECT username FROM users WHERE username = '{}'".format(username))
     if cursor.fetchone is not None:
         flash('this username is taken')
-        return signup()
+        global Flag
+        Flag = True
+        return home()
     else:
         cursor.execute("INSERT INTO users(username, password) VALUES('{}', '{}')".format(username, password))
         connection.commit()
@@ -56,7 +61,7 @@ def login():
             return 'wrong password!'
 
 '''shows user reviews'''
-@app.route('/myreviews')
+@app.route('/my-reviews')
 def user_reviews():
     if not session.get('logged_in'):
         return render_template('signup.html')
@@ -69,14 +74,17 @@ def user_reviews():
 
 '''shows all reviews'''
 @app.route('/reviews')
-
 def show_all_reviews():
     connection = sqlite3.connect('toast.db')
     cursor = connection.cursor()
     cursor.execute('SELECT toast.description, review, username FROM Reviews JOIN Toast ON reviews.toast_id = toast.id JOIN Users ON reviews.user_id = users.id')
     reviews = cursor.fetchall()
     connection.close()
-    return  render_template("reviews.html", reviews = reviews)
+    return render_template("reviews.html", reviews = reviews)
+
+@app.route('/create-review')
+def im_so_stressed():
+    return "please help me"
 
 
 
