@@ -9,7 +9,7 @@
 
     <body>
         <header>
-            <h1> The header</h1>
+            <h1> Signup</h1>
         </header>
 
         <nav>
@@ -17,7 +17,14 @@
         </nav>
 
         <main>
-            {%block content%}{%endblock%}
+            <form action="/signup" method="POST">
+                <input type="username" name="username" placeholder="Username">
+                <input type="password" name="password" placeholder="Password">
+                <input type="submit" value="Sign up">
+            </form>
+
+            <br>already have an account?</br>
+            <a href="http://127.0.0.1:5000/help me">Log in</a>
         </main>
 
         <footer>
@@ -25,4 +32,4 @@
         </footer>
     </body>
 
-</html>
+</html> 
