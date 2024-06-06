@@ -1,70 +1,79 @@
-from flask import Flask, render_template, request, session, flash
+from flask import Flask, render_template, request, session, redirect, url_for
 import sqlite3
+
 
 app = Flask(__name__)
 app.secret_key = "super secret key"
 
 '''home page'''
 @app.route('/')
-def home():
-    if not session.get('logged_in'):
-        return render_template('signup.html')
-    elif Flag == True:
-        text = 'this username is taken'
-        return render_template('signup.html', text = text)
+def index():
+    if 'username' in session:
+        return redirect(url_for('user_reviews'))
     else:
-        return render_template('myreviews.html')
+        return redirect(url_for('signup'))
+
+def home():
+    if session.get('logged_in'):
+        return redirect(url_for('signup'))
+    # elif Flag == True:
+    #     text = 'this username is taken'
+    #     return render_template('signup.html', text = text)
+    else:
+        return redirect(url_for('user_reviews'))
     
 
-@app.route('/login')
-def helpme():
-    render_template('login.html')
 
-@app.route('/login', methods = ['POST'])
+@app.route('/login', methods = ['POST', 'GET'])
 def login():
-    global username
-    username = request.form['username']
-    password = request.form['password']
-    connection = sqlite3.connect('toast.db')
-    cursor = connection.cursor()
-    cursor.execute("SELECT password FROM users WHERE username = '{}'".format(username))
-    key = cursor.fetchone()
-    connection.close()
-    if key is None:
-        return login()
-    elif key[0] == password:   
-        session['logged_in'] = True
-        return(user_reviews())
-    else:
-        return 'wrong password!'
+    if request.method =='GET':
+        return render_template('login.html')
+    elif request.method == 'POST':
+        # username = request.form['username']
+        username= request.form['username']
+        password = request.form['password']
+        connection = sqlite3.connect('toast.db')
+        cursor = connection.cursor()
+        cursor.execute("SELECT password FROM users WHERE username = '{}'".format(username))
+        key = cursor.fetchone()
+        connection.close()
+        if key is None:
+            error_message = 'incorrect username'
+            return render_template('login.html', error_message = error_message)
+        elif key[0] == password:   
+            session['username'] = username 
+            return redirect(url_for('user_reviews'))
+        else:
+            error_message = 'incorrect password'
+            return render_template('login.html', error_message = error_message)
 
-@app.route('/signup')
-def among():
-    return render_template('signup.html')
 
-'''sign up'''
-@app.route('/signup', methods = ['POST'])
+@app.route('/signup', methods = ['POST', 'GET'])
 def signup():
-    render_template('signup.html')
-    global username
-    username = request.form['username']
-    password = request.form['password']
-    connection = sqlite3.connect('toast.db')
-    cursor = connection.cursor()
-    #Mike Rhodes - Stack overflow :skull: verfication that username is not taken already
-    cursor.execute("SELECT username FROM users WHERE username = '{}'".format(username))
-    if cursor.fetchone() is not None:
-        flash('this username is taken')
-        global Flag
-        Flag = True
-        return home()
-    else:
-        cursor.execute("INSERT INTO users(username, password) VALUES('{}', '{}')".format(username, password))
-        connection.commit()
-        session['logged_in'] = True
-        return home()
+    if request.method == 'GET':
+        return render_template('signup.html')
+    elif request.method == 'POST':
+        username = request.form['username']
+        session["username"] = request.form['username']
+        password = request.form['password']
+        connection = sqlite3.connect('toast.db')
+        cursor = connection.cursor()
+        #Mike Rhodes - Stack overflow :skull: verfication that username is not taken already
+        cursor.execute("SELECT username FROM users WHERE username = '{}'".format(username))
+        if cursor.fetchone() is not None:
+            error_message = 'username is taken'
+            return render_template('signup.html', error_message = error_message)
+        else:
+            cursor.execute("INSERT INTO users(username, password) VALUES('{}', '{}')".format(username, password))
+            connection.commit()
+            session['logged_in'] = True
+            return redirect(url_for('index'))
+        
 
-
+@app.route('/logout')
+def logout():
+    session['username'] = None
+    return redirect(url_for('index'))
 
 
 
@@ -75,15 +84,18 @@ def signup():
 '''shows user reviews'''
 @app.route('/my-reviews')
 def user_reviews():
-    if not session.get('logged_in'):
+    if session["username"] is None:
         return render_template('signup.html')
     else:
-            connection = sqlite3.connect('toast.db')
-            cursor = connection.cursor()
-            cursor.execute("SELECT review FROM reviews WHERE username = '{}'".format(username))
-            reviews = cursor.fetchall()
-            return render_template('myreviews.html', reviews = reviews)
-
+        username = session["username"]
+        connection = sqlite3.connect('toast.db')
+        cursor = connection.cursor()
+        cursor.execute("SELECT id FROM users WHERE username = '{}'".format(username))
+        user_id = cursor.fetchone()
+        cursor.execute("SELECT review FROM reviews WHERE user_id = '{}'".format(user_id))
+        reviews = cursor.fetchall()
+        return render_template('myreviews.html', reviews = reviews)
+    
 '''shows all reviews'''
 @app.route('/reviews')
 def show_all_reviews():

@@ -5,8 +5,7 @@ amongus
 </head>
 
 <body>
-  {% block body %}
-  {% if session['logged_in'] %}
+  {% if session['username'] %}
 
   You're logged in already!
 
@@ -17,5 +16,7 @@ amongus
     <input type="submit" value="Log in">
   </form>
   {% endif %}
-  {% endblock %}
+
+  <br>{{incorrect_login}}</br>
+  
 </body>
