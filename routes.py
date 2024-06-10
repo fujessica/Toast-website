@@ -14,7 +14,7 @@ def index():
         return redirect(url_for('signup'))
 
 def home():
-    if session.get('logged_in'):
+    if session['username'] is not None:
         return redirect(url_for('signup'))
     # elif Flag == True:
     #     text = 'this username is taken'
@@ -37,12 +37,12 @@ def login():
         cursor.execute("SELECT password FROM users WHERE username = '{}'".format(username))
         key = cursor.fetchone()
         connection.close()
-        if key is None:
-            error_message = 'incorrect username'
-            return render_template('login.html', error_message = error_message)
-        elif key[0] == password:   
+        if key[0] == password:   
             session['username'] = username 
             return redirect(url_for('user_reviews'))
+        elif key is None:
+            error_message = 'incorrect username'
+            return render_template('login.html', error_message = error_message)
         else:
             error_message = 'incorrect password'
             return render_template('login.html', error_message = error_message)
@@ -91,7 +91,7 @@ def user_reviews():
         connection = sqlite3.connect('toast.db')
         cursor = connection.cursor()
         cursor.execute("SELECT id FROM users WHERE username = '{}'".format(username))
-        user_id = cursor.fetchone()
+        user_id = cursor.fetchone()[0]
         cursor.execute("SELECT review FROM reviews WHERE user_id = '{}'".format(user_id))
         reviews = cursor.fetchall()
         return render_template('myreviews.html', reviews = reviews)
