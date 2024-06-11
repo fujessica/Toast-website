@@ -70,6 +70,11 @@ def signup():
             return redirect(url_for('index'))
         
 
+@app.route('/create_review')
+def create_review():
+        return render_template('create_reviews.html')
+
+
 @app.route('/logout')
 def logout():
     session['username'] = None
