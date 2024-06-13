@@ -29,15 +29,14 @@ def login():
     if request.method =='GET':
         return render_template('login.html')
     elif request.method == 'POST':
-        # username = request.form['username']
-        username= request.form['username']
+        username = request.form['username']
         password = request.form['password']
         connection = sqlite3.connect('toast.db')
         cursor = connection.cursor()
         cursor.execute("SELECT password FROM users WHERE username = '{}'".format(username))
         key = cursor.fetchone()
         connection.close()
-        if key[0] == password:   
+        if key[0] == password:
             session['username'] = username 
             return redirect(url_for('user_reviews'))
         elif key is None:
@@ -70,9 +69,13 @@ def signup():
             return redirect(url_for('index'))
         
 
-@app.route('/create_review')
+@app.route('/create_review', methods = ['GET', 'POST'])
 def create_review():
-        return render_template('create_reviews.html')
+    if request.method == 'GET':
+        toasts = [(1, 'asdsdf'), (2, 'asdfsaads'), (3,'sdasda')]
+        return render_template('create_reviews.html', toasts=toasts)
+    # elif request.method == 'POST':
+    #     request.form['value'] = 
 
 
 @app.route('/logout')
