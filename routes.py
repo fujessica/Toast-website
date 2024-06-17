@@ -71,11 +71,22 @@ def signup():
 
 @app.route('/create_review', methods = ['GET', 'POST'])
 def create_review():
-    if request.method == 'GET':
-        toasts = [(1, 'asdsdf'), (2, 'asdfsaads'), (3,'sdasda')]
+    if session['username'] is None:
+        return redirect(url_for('login'))
+    elif request.method == 'GET':
+        connection = sqlite3.connect('toast.db')
+        cursor = connection.cursor()
+        cursor.execute('SELECT * FROM Toast')
+        toasts = cursor.fetchall()
         return render_template('create_reviews.html', toasts=toasts)
-    # elif request.method == 'POST':
-    #     request.form['value'] = 
+    elif request.method == 'POST':
+        toast_id = request.form['value']
+        toast_review = request.form['review']
+        username = session['username']
+        connection = sqlite3.connect('toast.db')
+        cursor = connection.cursor()
+        cursor.execute("INSERT INTO users(user_id, review, toast_id) VALUES('{}', '{}')".format(toast_id, toast_review))
+
 
 
 @app.route('/logout')
