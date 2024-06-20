@@ -1,22 +1,39 @@
 <!DOCTYPE html>
 
 <head>
-amongus
+  <style>
+  </style>
+
 </head>
 
+<navbar>
+  <br>{%include 'navbar.html'%}<br>
+</navbar>
+
 <body>
+
+
+    <h1>Login</h1>
+
+
   {% if session['username'] %}
 
   You're logged in already!
 
+  Want to log out?
+  <a href="/logout">Logout?</a>
+
   {% else %}
-  <form action="/login" method="POST">
+
+  <form action="/login" method="POST" class="amongs">
     <input type="username" name="username" placeholder="Username">
     <input type="password" name="password" placeholder="Password">
     <input type="submit" value="Log in">
   </form>
-  {% endif %}
 
   <br>{{error_message}}</br>
+
+  {% endif %}
+
   
 </body>

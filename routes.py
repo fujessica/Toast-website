@@ -16,9 +16,6 @@ def index():
 def home():
     if session['username'] is not None:
         return redirect(url_for('signup'))
-    # elif Flag == True:
-    #     text = 'this username is taken'
-    #     return render_template('signup.html', text = text)
     else:
         return redirect(url_for('user_reviews'))
     
@@ -31,17 +28,14 @@ def login():
     elif request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
-        connection = sqlite3.connect('toast.db')
-        cursor = connection.cursor()
-        cursor.execute("SELECT password FROM users WHERE username = '{}'".format(username))
-        key = cursor.fetchone()
-        connection.close()
-        if key[0] == password:
+        query = "SELECT password FROM users WHERE username = '{}'".format(username)
+        key = sql_queries(query, 0)
+        if key is None:
+            error_message = 'user does not exist'
+            return render_template('login.html', error_message = error_message)
+        elif key[0] == password:
             session['username'] = username 
             return redirect(url_for('user_reviews'))
-        elif key is None:
-            error_message = 'incorrect username'
-            return render_template('login.html', error_message = error_message)
         else:
             error_message = 'incorrect password'
             return render_template('login.html', error_message = error_message)
@@ -55,16 +49,15 @@ def signup():
         username = request.form['username']
         session["username"] = request.form['username']
         password = request.form['password']
-        connection = sqlite3.connect('toast.db')
-        cursor = connection.cursor()
-        #Mike Rhodes - Stack overflow :skull: verfication that username is not taken already
-        cursor.execute("SELECT username FROM users WHERE username = '{}'".format(username))
-        if cursor.fetchone() is not None:
+        #Mike Rhodes - Stack overflow verfication that username is not taken already
+        query = "SELECT username FROM users WHERE username = '{}'".format(username)
+        result = sql_queries(query, 0)
+        if result is not None:
             error_message = 'username is taken'
             return render_template('signup.html', error_message = error_message)
         else:
-            cursor.execute("INSERT INTO users(username, password) VALUES('{}', '{}')".format(username, password))
-            connection.commit()
+            query = "INSERT INTO users(username, password) VALUES('{}', '{}')".format(username, password)
+            sql_queries(query, 2)
             session['logged_in'] = True
             return redirect(url_for('index'))
         
@@ -74,19 +67,20 @@ def create_review():
     if session['username'] is None:
         return redirect(url_for('login'))
     elif request.method == 'GET':
-        connection = sqlite3.connect('toast.db')
-        cursor = connection.cursor()
-        cursor.execute('SELECT * FROM Toast')
-        toasts = cursor.fetchall()
+        query = 'SELECT * FROM Toast'
+        toasts = sql_queries(query, 1)
         return render_template('create_reviews.html', toasts=toasts)
     elif request.method == 'POST':
-        toast_id = request.form['value']
+        toast_id = request.form['toast_id']
         toast_review = request.form['review']
         username = session['username']
-        connection = sqlite3.connect('toast.db')
-        cursor = connection.cursor()
-        cursor.execute("INSERT INTO users(user_id, review, toast_id) VALUES('{}', '{}')".format(toast_id, toast_review))
-
+        query = "SELECT id FROM users WHERE username ='{}'".format(username)
+        result = sql_queries(query, 0)
+        user_id = result[0]
+        query = "INSERT INTO reviews(user_id, review, toast_id) VALUES('{}', '{}', '{}')".format(user_id, toast_review, toast_id)
+        sql_queries(query, 2)
+        success_message = 'review submitted'
+        return redirect(url_for('user_reviews', success_message = success_message))
 
 
 @app.route('/logout')
@@ -94,44 +88,36 @@ def logout():
     session['username'] = None
     return redirect(url_for('index'))
 
+def sql_queries(query, option):
+    connection = sqlite3.connect('toast.db')
+    cursor = connection.cursor()
+    cursor.execute(query)
+    if option == 0:
+        result = cursor.fetchone()
+        return result
+    elif option == 1:
+        result = cursor.fetchall()
+        return result
+    elif option == 2:
+        connection.commit()
+    connection.close()
 
-
-
-
-#things that are fine aka don;t need request.['something']
-
-'''shows user reviews'''
 @app.route('/my-reviews')
 def user_reviews():
     if session["username"] is None:
         return render_template('signup.html')
     else:
         username = session["username"]
-        connection = sqlite3.connect('toast.db')
-        cursor = connection.cursor()
-        cursor.execute("SELECT id FROM users WHERE username = '{}'".format(username))
-        user_id = cursor.fetchone()[0]
-        cursor.execute("SELECT review FROM reviews WHERE user_id = '{}'".format(user_id))
-        reviews = cursor.fetchall()
+        query = "SELECT r.review FROM reviews as r join users as u on r.user_id = u.id WHERE u.username = '{}'".format(username)
+        reviews = sql_queries(query, 1)
         return render_template('myreviews.html', reviews = reviews)
     
-'''shows all reviews'''
+
 @app.route('/reviews')
 def show_all_reviews():
-    connection = sqlite3.connect('toast.db')
-    cursor = connection.cursor()
-    cursor.execute('SELECT toast.description, review, username FROM Reviews JOIN Toast ON reviews.toast_id = toast.id JOIN Users ON reviews.user_id = users.id')
-    reviews = cursor.fetchall()
-    connection.close()
+    query = 'SELECT toast.description, review, username FROM Reviews JOIN Toast ON reviews.toast_id = toast.id JOIN Users ON reviews.user_id = users.id'
+    reviews = sql_queries(query, 1)
     return render_template("reviews.html", reviews = reviews)
-
-# def database_command():
-#     connection = sqlite3.connect('toast.db')
-#     cursor = connection.cursor()
-#     cursor.execute('SELECT toast.description, review, username FROM Reviews JOIN Toast ON reviews.toast_id = toast.id JOIN Users ON reviews.user_id = users.id')
-#     reviews = cursor.fetchall()
-#     connection.close()
-
 
 
 if __name__ == "__main__":

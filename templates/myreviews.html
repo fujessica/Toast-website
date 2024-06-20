@@ -7,14 +7,15 @@
         </title>
     </head>
 
-    <body>
-        <header>
-            <h1> The header</h1>
-        </header>
+    <nav>
+        <br>{%include 'navbar.html'%}<br>
+    </nav>
 
-        <nav>
-            NAVBAR
-        </nav>
+    <body>
+
+        <header>
+            <h1>My Reviews</h1>
+        </header>
 
         <main>
             {%for review in reviews%}
@@ -23,6 +24,8 @@
             {{review[2]}}<br><br>
             {%endfor%}
         </main>
+
+        <br>{{success_message}}
 
         <a href = "/logout">logout</a>
 

@@ -1,9 +1,12 @@
 <!DOCTYPE html>
 <html>
+    <head>
+        <link href='https://fonts.googleapis.com/css?family=Arvo' rel='stylesheet'>
+    </head>
 
     <style>
 
-        navbar {
+        div {
         background-color: #000000;
         padding-right:94.7%;
         position: fixed;
@@ -13,8 +16,7 @@
         width: 100%;
         }
 
-
-        .navbar a {
+        .object {
         float:right;
         display: block;
         color: #f2f2f2;
@@ -22,24 +24,40 @@
         text-decoration: none;
         padding:20px;
         padding-left:13px;
-        font-size: 17px;
+        font-size: 16px;
+        font-family: 'Arvo';
         }
 
-        .navbar a:hover {
+         a:hover {
         background: #ddd;
         color: black;
         } 
 
-    
-    </style>
+        .ping{
+            float:left;
+            display: block;
+            color: #f2f2f2;
+            text-align: center;
+            text-decoration: none;
+            padding:20px;
+            padding-left:13px;
+            font-size: 16px;
+            font-family: 'Arvo'
 
-    <navbar>
-        <div class="navbar">
-            <a class="home" href="/">Home</a>
-            <a href="/signup">Signup</a>
-            <a href="/reviews">Reviews</a>
-            <a href="/create_review">Create review</a>
-        </div> 
-    </navbar>
+        }
+
+    </style>
+    <body>
+        <navbar>
+            <div>
+                <a href="/" class="ping">TOAST</a>
+                <a href="/create_review" class="object">Create review</a>
+                <a href="/reviews" class="object">Reviews</a>
+                <a href="/signup" class="object">Signup</a>
+                <a href="/" class="object">Home</a>
+            </div> 
+        </navbar>
+    </body>
+
 
 </html>

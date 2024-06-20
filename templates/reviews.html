@@ -8,13 +8,14 @@
     </head>
 
     <body>
-        <header>
-            <h1> TOAST</h1>
-        </header>
 
         <nav>
-            NAVBAR
+            <br>{%include 'navbar.html'%}<br>
         </nav>
+
+        <header>
+            <h1> All Reviews</h1>
+        </header>
 
         <main>
             {%for review in reviews%}

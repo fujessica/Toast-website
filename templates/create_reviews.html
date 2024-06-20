@@ -7,11 +7,9 @@
         </title>
     </head>
 
-
-    <navbar>
-        <div class="navbar">
-          </div>
-    </navbar>
+    <nav>
+        <br>{%include 'navbar.html'%}<br>
+    </nav>
 
     <body>
         <header>
@@ -25,7 +23,7 @@
             <form name="Toast Reviewed" method="POST">
                 <label>Select Toast</label>
                 <br>
-                <select name="toasts">
+                <select name="toast_id">
                     {% for toast in toasts %}
                         <option value="{{toast[0]}}" SELECTED>{{toast[1]}}</option>
                     {% endfor %}
