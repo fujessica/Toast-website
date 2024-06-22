@@ -5,11 +5,8 @@ import sqlite3
 app = Flask(__name__)
 app.secret_key = "super secret key"
 
-'''home page'''
-@app.route('/')
-def homepage():
-    return render_template('home.html')
 
+'''functions'''
 
 def index():
     if 'username' in session:
@@ -17,7 +14,28 @@ def index():
     else:
         return redirect(url_for('signup'))
 
+def sql_queries(query, option):
+    connection = sqlite3.connect('toast.db')
+    cursor = connection.cursor()
+    cursor.execute(query)
+    if option == 0:
+        result = cursor.fetchone()
+        return result
+    elif option == 1:
+        result = cursor.fetchall()
+        return result
+    elif option == 2:
+        connection.commit()
+    connection.close()
 
+
+
+'''routes'''
+
+@app.route('/')
+def homepage():
+    return render_template('home.html')
+    
 @app.route('/login', methods = ['POST', 'GET'])
 def login():
     if request.method =='GET':
@@ -94,7 +112,7 @@ def user_reviews():
         username = session["username"]
         query = "SELECT r.review FROM reviews as r join users as u on r.user_id = u.id WHERE u.username = '{}'".format(username)
         reviews = sql_queries(query, 1)
-        return render_template('myreviews.html', reviews = reviews, username = username)
+        return render_template('my_reviews.html', reviews = reviews, username = username)
     
 
 @app.route('/reviews')
@@ -117,22 +135,7 @@ def delete_review():
         query = "DELETE FROM Reviews WHERE toast_id = '{}' and user_id =  '{}'".format(toast_id, user_id)
         sql_queries(query, 2)
         success_message = 'review deleted successfully'
-        return render_template('myreviews.html', success_message = success_message)
-
-def sql_queries(query, option):
-    connection = sqlite3.connect('toast.db')
-    cursor = connection.cursor()
-    cursor.execute(query)
-    if option == 0:
-        result = cursor.fetchone()
-        return result
-    elif option == 1:
-        result = cursor.fetchall()
-        return result
-    elif option == 2:
-        connection.commit()
-    connection.close()
-
+        return render_template('my_reviews.html', success_message = success_message)
 
 
 
