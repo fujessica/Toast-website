@@ -7,18 +7,15 @@ app.secret_key = "super secret key"
 
 '''home page'''
 @app.route('/')
+def homepage():
+    return render_template('home.html')
+
+
 def index():
     if 'username' in session:
         return redirect(url_for('user_reviews'))
     else:
         return redirect(url_for('signup'))
-
-def home():
-    if session['username'] is not None:
-        return redirect(url_for('signup'))
-    else:
-        return redirect(url_for('user_reviews'))
-    
 
 
 @app.route('/login', methods = ['POST', 'GET'])
@@ -58,7 +55,7 @@ def signup():
         else:
             query = "INSERT INTO users(username, password) VALUES('{}', '{}')".format(username, password)
             sql_queries(query, 2)
-            session['logged_in'] = True
+            session['username'] = username
             return redirect(url_for('index'))
         
 
@@ -88,6 +85,40 @@ def logout():
     session['username'] = None
     return redirect(url_for('index'))
 
+
+@app.route('/my-reviews')
+def user_reviews():
+    if session["username"] is None:
+        return render_template('signup.html')
+    else:
+        username = session["username"]
+        query = "SELECT r.review FROM reviews as r join users as u on r.user_id = u.id WHERE u.username = '{}'".format(username)
+        reviews = sql_queries(query, 1)
+        return render_template('myreviews.html', reviews = reviews, username = username)
+    
+
+@app.route('/reviews')
+def show_all_reviews():
+    query = 'SELECT description, review, username FROM Reviews JOIN Toast ON reviews.toast_id = toast.id JOIN Users ON reviews.user_id = users.id'
+    reviews = sql_queries(query, 1)
+    return render_template("reviews.html", reviews = reviews)
+
+@app.route('/delete', methods = ['GET', 'POST'])
+def delete_review():
+    username = session['username']
+    if request.method == 'GET':
+        query = "SELECT t.id, description FROM reviews as r join users as u on r.user_id = u.id join Toast as t on r.toast_id = t.id WHERE u.username = '{}'".format(username)
+        toasts = sql_queries(query, 1)
+        return render_template('delete_review(imlazy).html', toasts = toasts)
+    elif request.method == 'POST':
+        query = "SELECT id FROM Users WHERE username = '{}'".format(username)
+        user_id = sql_queries(query, 0)[0]
+        toast_id = request.form['toast_id']
+        query = "DELETE FROM Reviews WHERE toast_id = '{}' and user_id =  '{}'".format(toast_id, user_id)
+        sql_queries(query, 2)
+        success_message = 'review deleted successfully'
+        return render_template('myreviews.html', success_message = success_message)
+
 def sql_queries(query, option):
     connection = sqlite3.connect('toast.db')
     cursor = connection.cursor()
@@ -102,22 +133,7 @@ def sql_queries(query, option):
         connection.commit()
     connection.close()
 
-@app.route('/my-reviews')
-def user_reviews():
-    if session["username"] is None:
-        return render_template('signup.html')
-    else:
-        username = session["username"]
-        query = "SELECT r.review FROM reviews as r join users as u on r.user_id = u.id WHERE u.username = '{}'".format(username)
-        reviews = sql_queries(query, 1)
-        return render_template('myreviews.html', reviews = reviews)
-    
 
-@app.route('/reviews')
-def show_all_reviews():
-    query = 'SELECT toast.description, review, username FROM Reviews JOIN Toast ON reviews.toast_id = toast.id JOIN Users ON reviews.user_id = users.id'
-    reviews = sql_queries(query, 1)
-    return render_template("reviews.html", reviews = reviews)
 
 
 if __name__ == "__main__":
