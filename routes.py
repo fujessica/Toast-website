@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, session, redirect, url_for
-import hashlib
+from hashlib import sha256
 import sqlite3
 
 
@@ -30,7 +30,7 @@ def sql_queries(query, option):
     connection.close()
 
 def hash_password(password):
-    password_hash = hashlib.sha256((password ).encode('utf-8')).hexdigest()
+    password_hash = sha256((password ).encode('utf-8')).hexdigest()
     return password_hash
 
 def has_numbers(password):
