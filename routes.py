@@ -1,4 +1,5 @@
 from flask import Flask, render_template, request, session, redirect, url_for
+import hashlib
 import sqlite3
 
 
@@ -28,6 +29,13 @@ def sql_queries(query, option):
         connection.commit()
     connection.close()
 
+def hash_password(password):
+    password_hash = hashlib.sha256((password ).encode('utf-8')).hexdigest()
+    return password_hash
+
+def has_numbers(password):
+    return any(i.isdigit() for i in password)
+
 
 
 '''routes'''
@@ -35,6 +43,7 @@ def sql_queries(query, option):
 @app.route('/')
 def homepage():
     return render_template('home.html')
+
     
 @app.route('/login', methods = ['POST', 'GET'])
 def login():
@@ -43,12 +52,13 @@ def login():
     elif request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
+        hashed_password = hash_password(password)
         query = "SELECT password FROM users WHERE username = '{}'".format(username)
         key = sql_queries(query, 0)
         if key is None:
             error_message = 'user does not exist'
             return render_template('login.html', error_message = error_message)
-        elif key[0] == password:
+        elif key[0] == hashed_password:
             session['username'] = username 
             return redirect(url_for('user_reviews'))
         else:
@@ -64,17 +74,29 @@ def signup():
         username = request.form['username']
         session["username"] = request.form['username']
         password = request.form['password']
-        #Mike Rhodes - Stack overflow verfication that username is not taken already
-        query = "SELECT username FROM users WHERE username = '{}'".format(username)
-        result = sql_queries(query, 0)
-        if result is not None:
-            error_message = 'username is taken'
+        if len(password) > 8 and len(username > 8):
+            #Mike Rhodes - Stack overflow verfication that username is not taken already
+            query = "SELECT username FROM users WHERE username = '{}'".format(username)
+            result = sql_queries(query, 0)
+            if result is not None:
+                error_message = 'username is taken'
+                return render_template('signup.html', error_message = error_message)
+            else:
+                password = hash_password(password)
+                query = "INSERT INTO users(username, password) VALUES('{}', '{}')".format(username, password)
+                sql_queries(query, 2)
+                session['username'] = username
+                return redirect(url_for('homepage'))
+        elif len(username)<8:
+            error_message = 'username is too short :C'
+            return render_template('signup.html', error_message = error_message)
+        elif has_numbers(password) == False:
+            error_message = 'password must contain numbers'
             return render_template('signup.html', error_message = error_message)
         else:
-            query = "INSERT INTO users(username, password) VALUES('{}', '{}')".format(username, password)
-            sql_queries(query, 2)
-            session['username'] = username
-            return redirect(url_for('index'))
+            error_message = 'password too short'
+            return render_template('signup.html', error_message = error_message)
+
         
 
 @app.route('/create_review', methods = ['GET', 'POST'])
@@ -101,7 +123,7 @@ def create_review():
 @app.route('/logout')
 def logout():
     session['username'] = None
-    return redirect(url_for('index'))
+    return redirect(url_for('homepage'))
 
 
 @app.route('/my-reviews')
@@ -113,6 +135,7 @@ def user_reviews():
         query = "SELECT r.review FROM reviews as r join users as u on r.user_id = u.id WHERE u.username = '{}'".format(username)
         reviews = sql_queries(query, 1)
         return render_template('my_reviews.html', reviews = reviews, username = username)
+    
     
 
 @app.route('/reviews')
@@ -127,7 +150,7 @@ def delete_review():
     if request.method == 'GET':
         query = "SELECT t.id, description FROM reviews as r join users as u on r.user_id = u.id join Toast as t on r.toast_id = t.id WHERE u.username = '{}'".format(username)
         toasts = sql_queries(query, 1)
-        return render_template('delete_review(imlazy).html', toasts = toasts)
+        return render_template('delete_review.html', toasts = toasts)
     elif request.method == 'POST':
         query = "SELECT id FROM Users WHERE username = '{}'".format(username)
         user_id = sql_queries(query, 0)[0]
