@@ -74,7 +74,7 @@ def signup():
         username = request.form['username']
         session["username"] = request.form['username']
         password = request.form['password']
-        if len(password) > 8 and len(username > 8):
+        if 20 > len(password) > 8 and 20 > len(username)>8:
             #Mike Rhodes - Stack overflow verfication that username is not taken already
             query = "SELECT username FROM users WHERE username = '{}'".format(username)
             result = sql_queries(query, 0)
@@ -87,15 +87,16 @@ def signup():
                 sql_queries(query, 2)
                 session['username'] = username
                 return redirect(url_for('homepage'))
-        elif len(username)<8:
-            error_message = 'username is too short :C'
+        elif len(username)<8 or len(username)>20:
+            error_message = 'username invalid'
             return render_template('signup.html', error_message = error_message)
-        elif has_numbers(password) == False:
-            error_message = 'password must contain numbers'
+        elif has_numbers(password) == False or len(password) > 20 or len(password) < 8:
+            error_message = 'password invalid'
             return render_template('signup.html', error_message = error_message)
         else:
-            error_message = 'password too short'
+            error_message = 'what the sigma'
             return render_template('signup.html', error_message = error_message)
+
 
         
 
@@ -126,7 +127,7 @@ def logout():
     return redirect(url_for('homepage'))
 
 
-@app.route('/my-reviews')
+@app.route('/my_reviews')
 def user_reviews():
     if session["username"] is None:
         return render_template('signup.html')
@@ -144,22 +145,35 @@ def show_all_reviews():
     reviews = sql_queries(query, 1)
     return render_template("reviews.html", reviews = reviews)
 
-@app.route('/delete', methods = ['GET', 'POST'])
+@app.route('/delete_reviews', methods = ['GET', 'POST'])
 def delete_review():
-    username = session['username']
     if request.method == 'GET':
+        username = session['username']
         query = "SELECT t.id, description FROM reviews as r join users as u on r.user_id = u.id join Toast as t on r.toast_id = t.id WHERE u.username = '{}'".format(username)
         toasts = sql_queries(query, 1)
         return render_template('delete_review.html', toasts = toasts)
     elif request.method == 'POST':
-        query = "SELECT id FROM Users WHERE username = '{}'".format(username)
-        user_id = sql_queries(query, 0)[0]
-        toast_id = request.form['toast_id']
-        query = "DELETE FROM Reviews WHERE toast_id = '{}' and user_id =  '{}'".format(toast_id, user_id)
-        sql_queries(query, 2)
-        success_message = 'review deleted successfully'
-        return render_template('my_reviews.html', success_message = success_message)
-
+        username = request.form['username']
+        password = request.form['password']
+        password = hash_password(password)
+        query = "SELECT password FROM Users WHERE username = '{}'"
+        key = sql_queries(query, 0)
+        if username == session['username'] and password == key[0]:
+            query = "SELECT id FROM Users WHERE username = '{}'".format(username)
+            user_id = sql_queries(query, 0)[0]
+            toast_id = request.form['toast_id']
+            query = "DELETE FROM Reviews WHERE toast_id = '{}' and user_id =  '{}'".format(toast_id, user_id)
+            sql_queries(query, 2)
+            success_message = 'review deleted successfully'
+            return render_template('my_reviews.html', success_message = success_message)
+        else:
+            error_message = 'user authentication failed'
+            return redirect(url_for('delete_review'))
+    
+@app.route('/update_reviews')
+def update_reviews():
+    return 'among'
+    
 
 
 if __name__ == "__main__":

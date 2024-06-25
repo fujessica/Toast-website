@@ -6,7 +6,7 @@
         <h1>Delete review</h1>
     </head>
 
-    <form action="/delete" method="POST">
+    <form action="/delete_reviews" method="POST">
         <input type="username" name="username" placeholder="Username"><br>
         <input type="password" name="password" placeholder="Password"><br>
         <select name="toast_id">
@@ -14,7 +14,9 @@
                 <option value="{{toast[0]}}" SELECTED>{{toast[1]}}</option><br>
             {% endfor %}
         </select>
-        <input type="submit" value="Delete Review">
+        <input type="submit" value="Delete review">
       </form>
+
+      {{error_message}}
 
 </html>
