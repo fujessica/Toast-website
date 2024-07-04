@@ -9,12 +9,6 @@ app.secret_key = "super secret key"
 
 '''functions'''
 
-def index():
-    if 'username' in session:
-        return redirect(url_for('user_reviews'))
-    else:
-        return redirect(url_for('signup'))
-
 def sql_queries(query, option):
     connection = sqlite3.connect('toast.db')
     cursor = connection.cursor()
@@ -102,10 +96,10 @@ def signup():
 
 @app.route('/create_review', methods = ['GET', 'POST'])
 def create_review():
-    if session['username'] is None:
-        return redirect(url_for('login'))
+    if 'username' not in session or session['username'] is None:
+        return redirect(url_for('signup'))
     elif request.method == 'GET':
-        query = 'SELECT * FROM Toast'
+        query = "SELECT id, description from Toast EXCEPT SELECT t.id, t.description FROM Toast as t JOIN reviews AS r ON r.toast_id = t.id JOIN users AS u ON u.id = r.user_id WHERE u.username = '{}'".format(session['username'])
         toasts = sql_queries(query, 1)
         return render_template('create_reviews.html', toasts=toasts)
     elif request.method == 'POST':
@@ -129,8 +123,8 @@ def logout():
 
 @app.route('/my_reviews')
 def user_reviews():
-    if session["username"] is None:
-        return render_template('signup.html')
+    if 'username' not in session or session['username'] is None:
+        return redirect(url_for('signup'))
     else:
         username = session["username"]
         query = "SELECT r.review FROM reviews as r join users as u on r.user_id = u.id WHERE u.username = '{}'".format(username)
@@ -147,33 +141,43 @@ def show_all_reviews():
 
 @app.route('/delete_reviews', methods = ['GET', 'POST'])
 def delete_review():
-    if request.method == 'GET':
-        username = session['username']
-        query = "SELECT t.id, description FROM reviews as r join users as u on r.user_id = u.id join Toast as t on r.toast_id = t.id WHERE u.username = '{}'".format(username)
-        toasts = sql_queries(query, 1)
-        return render_template('delete_review.html', toasts = toasts)
-    elif request.method == 'POST':
-        username = request.form['username']
-        password = request.form['password']
-        password = hash_password(password)
-        query = "SELECT password FROM Users WHERE username = '{}'"
-        key = sql_queries(query, 0)
-        if username == session['username'] and password == key[0]:
-            query = "SELECT id FROM Users WHERE username = '{}'".format(username)
-            user_id = sql_queries(query, 0)[0]
-            toast_id = request.form['toast_id']
-            query = "DELETE FROM Reviews WHERE toast_id = '{}' and user_id =  '{}'".format(toast_id, user_id)
-            sql_queries(query, 2)
-            success_message = 'review deleted successfully'
-            return render_template('my_reviews.html', success_message = success_message)
-        else:
-            error_message = 'user authentication failed'
-            return redirect(url_for('delete_review'))
+    if 'username' not in session or session['username'] is None:
+        return redirect(url_for('signup'))
+    else:
+        if request.method == 'GET':
+            username = session['username']
+            query = "SELECT t.id, description FROM reviews as r join users as u on r.user_id = u.id join Toast as t on r.toast_id = t.id WHERE u.username = '{}'".format(username)
+            toasts = sql_queries(query, 1)
+            return render_template('delete_review.html', toasts = toasts)
+        elif request.method == 'POST':
+            username = request.form['username']
+            password = request.form['password']
+            password = hash_password(password)
+            query = "SELECT password FROM Users WHERE username = '{}'".format(username)
+            key = sql_queries(query, 0)
+            if username == session['username'] and password == key[0]:
+                query = "SELECT id FROM Users WHERE username = '{}'".format(username)
+                user_id = sql_queries(query, 0)[0]
+                toast_id = request.form['toast_id']
+                query = "DELETE FROM Reviews WHERE toast_id = '{}' and user_id =  '{}'".format(toast_id, user_id)
+                sql_queries(query, 2)
+                return redirect(url_for('user_reviews'))
+            else:
+                username = session['username']
+                query = "SELECT t.id, description FROM reviews as r join users as u on r.user_id = u.id join Toast as t on r.toast_id = t.id WHERE u.username = '{}'".format(username)
+                toasts = sql_queries(query, 1)
+                error_message = 'user authentification failed'
+                return render_template('delete_review.html', toasts = toasts, error_message = error_message)
     
-@app.route('/update_reviews')
+@app.route('/update_reviews', methods = ['POST', 'GET'])
 def update_reviews():
-    return 'among'
+        if request.method == 'GET':
+            return 'among'
+
     
+
+#request.form['date']
+#print ('hello')
 
 
 if __name__ == "__main__":

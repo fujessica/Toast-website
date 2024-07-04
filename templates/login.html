@@ -11,29 +11,32 @@
 </navbar>
 
 <body>
+  <main>
+      <h1>Login</h1>
 
 
-    <h1>Login</h1>
+    {% if session['username'] %}
 
+    You're logged in already!
 
-  {% if session['username'] %}
+    Want to log out?
+    <a href="/logout">Logout?</a>
 
-  You're logged in already!
+    {% else %}
 
-  Want to log out?
-  <a href="/logout">Logout?</a>
+    <form action="/login" method="POST">
+      <input type="username" name="username" placeholder="Username">
+      <input type="password" name="password" placeholder="Password">
+      <input type="submit" value="Log in">
+    </form>
 
-  {% else %}
+    <br>{{error_message}}</br>
 
-  <form action="/login" method="POST">
-    <input type="username" name="username" placeholder="Username">
-    <input type="password" name="password" placeholder="Password">
-    <input type="submit" value="Log in">
-  </form>
+    <br>don't have an account?<br>
+    <a href="/signup">Sign up</a>
 
-  <br>{{error_message}}</br>
-
-  {% endif %}
+    {% endif %}
+</main>
 
   
 </body>

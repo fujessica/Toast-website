@@ -5,11 +5,18 @@
         <title>
             My Site
         </title>
+
+        <style>
+            main{
+                word-break: break-all;
+            }
+        </style>
     </head>
 
     <nav>
         <br>{%include 'navbar.html'%}<br>
     </nav>
+
 
     <body>
 
@@ -21,14 +28,16 @@
             {%for review in reviews%}
             <br>{{review[0]}}<br>
             {%endfor%}
+
+            <br>{{success_message}}
+
+            <a href = "/logout">logout</a><br>
+
+            <a href="/delete_reviews">delete a review?</a>
         </main>
 
-        <br>{{success_message}}
-
-        <a href = "/logout">logout</a>
-
         <footer>
-            <p>the footer</p>
+            <p></p>
         </footer>
     </body>
 
