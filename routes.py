@@ -140,7 +140,7 @@ def user_reviews():
         return redirect(url_for('signup'))
     else:
         username = session["username"]
-        query = "SELECT t.description, r.review FROM reviews AS r JOIN Users as u ON r.user_id = u.id join Toast AS t ON t.id = r.toast_id WHERE username = '{}'".format(
+        query = "SELECT t.description, r.review, t.id FROM reviews AS r JOIN Users as u ON r.user_id = u.id join Toast AS t ON t.id = r.toast_id WHERE username = '{}'".format(
             username)
         reviews = sql_queries(query, 1)
         return render_template('my_reviews.html', reviews=reviews, username=username)

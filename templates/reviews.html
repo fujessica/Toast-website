@@ -1,13 +1,14 @@
 {% extends 'layout.html' %}
-
-{%block h1-%}
-All Reviews</h1>
-{%- endblock%}
-
-{%block main -%}
-{%for review in reviews%}
-<br>{{review[0]}}<br>
-{{review[1]}}<br>
-{{review[2]}}<br><br>
-{%endfor%}
+{% block h1 -%}All Reviews{%- endblock %}
+{% block main -%}
+    {% for review in reviews %}
+        <br>
+        {{ review[0] }}
+        <br>
+        {{ review[1] }}
+        <br>
+        {{ review[2] }}
+        <br>
+        <br>
+    {% endfor %}
 {%- endblock %}
