@@ -41,3 +41,10 @@ div {
         font-family: 'Arvo'
 
     }
+
+textarea{
+    resize:none;
+    width:1000px;
+    height:100px;
+    font-family: Arial, Helvetica, sans-serif;
+}

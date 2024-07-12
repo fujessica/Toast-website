@@ -1,20 +1,16 @@
-{%extends 'layout.html'%}
-
-
-{% block h1 -%}
-    {{username}}'s Reviews
-{%- endblock%}
-
-{% block main -%}
-    {%for review in reviews%}
-    <br>{{review[0]}}
-    <br>{{review[1]}}<br>
-    {%endfor%}
-
-    <br>{{success_message}}
-
-    <a href = "/logout">logout</a><br>
-
-    <a href="/delete_reviews">delete a review?</a>
-{%- endblock%}
-
+{% extends 'layout.html' %}
+{% block h1 -%}{{ username }}'s Reviews{%- endblock %}
+    {% block main -%}
+        {% for review in reviews %}
+            <br>
+            {{ review[0] }}
+            <br>
+            {{ review[1] }}
+            <br>
+        {% endfor %}
+        <br>
+        {{ success_message }}
+        <a href="/logout">logout</a>
+        <br>
+        <a href="/delete_reviews">delete a review?</a>
+    {%- endblock %}
