@@ -1,39 +1,13 @@
-<!DOCTYPE html>
-<html>
+{% extends 'layout.html' %}
 
-    <head>
-        <title>
-            Toast
-        </title>
+{%block h1-%}
+All Reviews</h1>
+{%- endblock%}
 
-        <style>
-            main{
-                word-break: break-all;
-            }
-        </style>
-    </head>
-
-    <body>
-
-        <nav>
-            <br>{%include 'navbar.html'%}<br>
-        </nav>
-
-        <header>
-            <h1> All Reviews</h1>
-        </header>
-
-        <main>
-            {%for review in reviews%}
-            <br>{{review[0]}}<br>
-            {{review[1]}}<br>
-            {{review[2]}}<br><br>
-            {%endfor%}
-        </main>
-
-        <footer>
-            <p>the footer</p>
-        </footer>
-    </body>
-
-</html>
+{%block main -%}
+{%for review in reviews%}
+<br>{{review[0]}}<br>
+{{review[1]}}<br>
+{{review[2]}}<br><br>
+{%endfor%}
+{%- endblock %}

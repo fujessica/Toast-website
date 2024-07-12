@@ -1,44 +1,20 @@
-<!DOCTYPE html>
-<html>
-
-    <head>
-        <title>
-            My Site
-        </title>
-
-        <style>
-            main{
-                word-break: break-all;
-            }
-        </style>
-    </head>
-
-    <nav>
-        <br>{%include 'navbar.html'%}<br>
-    </nav>
+{%extends 'layout.html'%}
 
 
-    <body>
+{% block h1 -%}
+    {{username}}'s Reviews
+{%- endblock%}
 
-        <header>
-            <h1>{{username}}'s Reviews</h1>
-        </header>
+{% block main -%}
+    {%for review in reviews%}
+    <br>{{review[0]}}
+    <br>{{review[1]}}<br>
+    {%endfor%}
 
-        <main>
-            {%for review in reviews%}
-            <br>{{review[0]}}<br>
-            {%endfor%}
+    <br>{{success_message}}
 
-            <br>{{success_message}}
+    <a href = "/logout">logout</a><br>
 
-            <a href = "/logout">logout</a><br>
+    <a href="/delete_reviews">delete a review?</a>
+{%- endblock%}
 
-            <a href="/delete_reviews">delete a review?</a>
-        </main>
-
-        <footer>
-            <p></p>
-        </footer>
-    </body>
-
-</html>

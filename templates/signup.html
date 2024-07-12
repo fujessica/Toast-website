@@ -1,41 +1,21 @@
-<!DOCTYPE html>
-<html>
+{%extends 'layout.html'%}
 
-    <head>
-        <title>
-            TOAST
-        </title>
-    </head>
+{%block h1 -%}
+Signup
+{%- endblock%} 
 
-    <nav>
-        <br>{%include 'navbar.html'%}<br>
-    </nav>
+{%block main -%} 
+<form action="/signup" method="POST">
+    <input type="username" name="username" placeholder="Username">
+    <input type="password" name="password" placeholder="Password">
+    <input type="submit" value="Sign up">
+</form><br>
 
-    <body>
-        <header>
-            <h1> Signup</h1>
-        </header>
+- password and username must be at least 8 characters and below 20 characters <br>
+- password must contain at least one number<br>
 
+<br>{{error_message}}<br>
 
-        <main>
-            <form action="/signup" method="POST">
-                <input type="username" name="username" placeholder="Username">
-                <input type="password" name="password" placeholder="Password">
-                <input type="submit" value="Sign up">
-            </form><br>
-
-            - password and username must be at least 8 characters and below 20 characters <br>
-            - password must contain at least one number<br>
-            
-            <br>{{error_message}}<br>
-
-            <br>already have an account?</br>
-            <a href="/login">Log in</a>
-        </main>
-
-        <footer>
-            <p>the footer</p>
-        </footer>
-    </body>
-
-</html> 
+<br>already have an account?</br>
+<a href="/login">Log in</a>
+{%- endblock%} 

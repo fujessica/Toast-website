@@ -1,20 +1,11 @@
-<!DOCTYPE html>
-
-<head>
-  <style>
-  </style>
-
-</head>
-
-<navbar>
-  <br>{%include 'navbar.html'%}<br>
-</navbar>
-
-<body>
-  <main>
-      <h1>Login</h1>
+{%extends 'layout.html'%}
 
 
+{%block h1-%}
+Login
+{%- endblock%}
+
+{%block main-%}
     {% if session['username'] %}
 
     You're logged in already!
@@ -36,7 +27,4 @@
     <a href="/signup">Sign up</a>
 
     {% endif %}
-</main>
-
-  
-</body>
+{%- endblock%}
