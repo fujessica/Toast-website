@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, session, redirect, url_for
+from flask import Flask, render_template, request, session, redirect, url_for, flash
 from hashlib import sha256
 import sqlite3
 
@@ -42,6 +42,37 @@ def homepage():
     return render_template('home.html')
 
 
+@app.route('/signup', methods=['POST', 'GET'])
+def signup():
+    if request.method == 'GET':
+        return render_template('signup.html')
+    elif request.method == 'POST':
+        username = request.form['username']
+        session["username"] = request.form['username']
+        password = request.form['password']
+        if 20 > len(password) > 8 and 20 > len(username) > 8:
+            # Mike Rhodes - Stack overflow verfication that username is not taken already
+            if username is not None:
+                error_message = 'username is taken'
+                return render_template('signup.html', error_message=error_message)
+            else:
+                password = hash_password(password)
+                query = "INSERT INTO users(username, password) VALUES('{}', '{}')".format(
+                    username, password)
+                sql_queries(query, 2)
+                session['username'] = username
+                return redirect(url_for('homepage'))
+        elif len(username) < 8 or len(username) > 20:
+            error_message = 'username invalid'
+            return render_template('signup.html', error_message=error_message)
+        elif has_numbers(password) == False or len(password) > 20 or len(password) < 8:
+            error_message = 'password invalid'
+            return render_template('signup.html', error_message=error_message)
+        else:
+            error_message = 'what the sigma'
+            return render_template('signup.html', error_message=error_message)
+
+
 @app.route('/login', methods=['POST', 'GET'])
 def login():
     if request.method == 'GET':
@@ -64,38 +95,23 @@ def login():
             return render_template('login.html', error_message=error_message)
 
 
-@app.route('/signup', methods=['POST', 'GET'])
-def signup():
-    if request.method == 'GET':
-        return render_template('signup.html')
-    elif request.method == 'POST':
-        username = request.form['username']
-        session["username"] = request.form['username']
-        password = request.form['password']
-        if 20 > len(password) > 8 and 20 > len(username) > 8:
-            # Mike Rhodes - Stack overflow verfication that username is not taken already
-            query = "SELECT username FROM users WHERE username = '{}'".format(
-                username)
-            result = sql_queries(query, 0)
-            if result is not None:
-                error_message = 'username is taken'
-                return render_template('signup.html', error_message=error_message)
-            else:
-                password = hash_password(password)
-                query = "INSERT INTO users(username, password) VALUES('{}', '{}')".format(
-                    username, password)
-                sql_queries(query, 2)
-                session['username'] = username
-                return redirect(url_for('homepage'))
-        elif len(username) < 8 or len(username) > 20:
-            error_message = 'username invalid'
-            return render_template('signup.html', error_message=error_message)
-        elif has_numbers(password) == False or len(password) > 20 or len(password) < 8:
-            error_message = 'password invalid'
-            return render_template('signup.html', error_message=error_message)
-        else:
-            error_message = 'what the sigma'
-            return render_template('signup.html', error_message=error_message)
+@app.route('/reviews')
+def show_all_reviews():
+    query = 'SELECT description, review, username FROM Reviews JOIN Toast ON reviews.toast_id = toast.id JOIN Users ON reviews.user_id = users.id'
+    reviews = sql_queries(query, 1)
+    return render_template("reviews.html", reviews=reviews)
+
+
+@app.route('/my_reviews')
+def user_reviews():
+    if 'username' not in session or session['username'] is None:
+        return redirect(url_for('signup'))
+    else:
+        username = session["username"]
+        query = "SELECT t.description, r.review, t.id FROM reviews AS r JOIN Users as u ON r.user_id = u.id join Toast AS t ON t.id = r.toast_id WHERE username = '{}'".format(
+            username)
+        reviews = sql_queries(query, 1)
+        return render_template('my_reviews.html', reviews=reviews, username=username)
 
 
 @app.route('/create_review', methods=['GET', 'POST'])
@@ -126,32 +142,7 @@ def create_review():
                 user_id, toast_review, toast_id)
             sql_queries(query, 2)
             return redirect(url_for('user_reviews'))
-
-
-@app.route('/logout')
-def logout():
-    session['username'] = None
-    return redirect(url_for('homepage'))
-
-
-@app.route('/my_reviews')
-def user_reviews():
-    if 'username' not in session or session['username'] is None:
-        return redirect(url_for('signup'))
-    else:
-        username = session["username"]
-        query = "SELECT t.description, r.review, t.id FROM reviews AS r JOIN Users as u ON r.user_id = u.id join Toast AS t ON t.id = r.toast_id WHERE username = '{}'".format(
-            username)
-        reviews = sql_queries(query, 1)
-        return render_template('my_reviews.html', reviews=reviews, username=username)
-
-
-@app.route('/reviews')
-def show_all_reviews():
-    query = 'SELECT description, review, username FROM Reviews JOIN Toast ON reviews.toast_id = toast.id JOIN Users ON reviews.user_id = users.id'
-    reviews = sql_queries(query, 1)
-    return render_template("reviews.html", reviews=reviews)
-
+        
 
 @app.route('/delete_reviews', methods=['GET', 'POST'])
 def delete_review():
@@ -188,16 +179,31 @@ def delete_review():
                 error_message = 'user authentification failed'
                 return render_template('delete_reviews.html', toasts=toasts, error_message=error_message)
 
-
-@app.route('/update_reviews', methods=['POST', 'GET'])
+@app.route('/update_reviews', methods=['GET', 'POST'])
 def update_reviews():
     if request.method == 'GET':
-        return render_template('update_reviews.html')
+        username = session['username']
+        query = "SELECT t.id, description, review FROM reviews as r join users as u on r.user_id = u.id join Toast as t on r.toast_id = t.id WHERE u.username = '{}'".format(
+        username)
+        toasts = sql_queries(query, 1)
+        return render_template('update_reviews.html', toasts=toasts)
     elif request.method == 'POST':
-        return ':D'
+        toast_id = request.form['toast_id']
+        review = request.form['review']
+        query = "SELECT id FROM users WHERE username = '{}'".format(username)
+        user_id = sql_queries(query, 0)[0]
+        query = ''' UPDATE Reviews SET review = "{}" WHERE toast_id = '{}' and user_id = '{}' '''.format(review, toast_id, user_id)
+        connection = sqlite3.connect('toast.db')
+        cursor = connection.cursor()
+        cursor.execute(query)
+        connection.commit()
+        return redirect(url_for('user_reviews'))
 
-# request.form['date']
-# print ('hello')
+
+@app.route('/logout')
+def logout():
+    session['username'] = None
+    return redirect(url_for('homepage'))
 
 
 if __name__ == "__main__":

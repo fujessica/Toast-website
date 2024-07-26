@@ -4,7 +4,7 @@
         <title>Toast Website</title>
         <meta name="description" content="Jessica's website for toast reviews">
         <meta name="keywords" content="toast, review">
-        <link href='https://fonts.googleapis.com/css?family=Arvo' rel='stylesheet'>
+        <link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Arvo'>
         <link rel="stylesheet" href="static/style.css">
     </head>
     <body>
@@ -16,13 +16,12 @@
         </header>
         <navbar>
             <div>
-                <a href="/" id="ping">TOAST</a>
+                <a href="/" id="home_toast">TOAST</a>
                 <a href="/create_review" class="object">Create review</a>
                 <a href="/reviews" class="object">Reviews</a>
                 <a href="/my_reviews" class="object">My Reviews</a>
                 <a href="/" class="object">Home</a>
             </div>
-            
         </navbar>
         <main>
             {% block main %}{% endblock %}

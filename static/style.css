@@ -5,12 +5,15 @@ body {
     padding:15px;
 }
 
-a {
-    text-decoration: none;
-    color:black;
-}
 
 /*Navbar*/
+
+
+nav.a {
+    text-decoration: none;
+    color:black;
+    z-index: 100;
+}
 
 div {
     background-color: #000000;
@@ -20,6 +23,7 @@ div {
     left: 0;
     right: 0;
     width: 100%;
+    z-index: 100;
 }
 
 .object {
@@ -39,7 +43,7 @@ div {
     color: black;
 }
 
-#ping {
+#home_toast {
     float: left;
     display: block;
     color: #f2f2f2;
@@ -80,4 +84,35 @@ textarea {
     border:black;
     background-color:#ddd;
     color:black;
+}
+
+/* My Reviews */
+
+div.gridContainer {
+    z-index:0;
+    background-color:transparent;
+    padding-right:15px;
+    position:relative;
+    top:auto;
+    left:auto;
+    right:auto;
+    width:auto;
+    margin:15px;
+}
+
+.gridItem {
+    z-index:0;
+    background-color:antiquewhite;
+    margin:20px;
+    position: relative; 
+    top: auto;
+    left:auto;
+    right:auto;
+    width:auto;
+    padding:30px;
+}
+
+.my_reviews_buttons{
+    padding-left:10px;
+    float:right;
 }

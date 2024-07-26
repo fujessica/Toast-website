@@ -1,20 +1,20 @@
 {% extends 'layout.html' %}
 {% block h1 -%}{{ username }}'s Reviews{%- endblock %}
     {% block main -%}
+    <div class="gridContainer">
         {% for review in reviews %}
-            <br>
+        <div class="gridItem">
             {{ review[0] }}
             <br>
             {{ review[1] }}
             <br>
-            <a href="/delete_reviews">delete review</a> <a value={{review[2]}}>update</a>
-            <br>
+            <a class="my_reviews_buttons" href="/delete_reviews">delete</a><a class="my_reviews_buttons" href="/update_reviews">update</a>
+        </div>
         {% endfor %}
+
+        <a href="/logout">logout</a>
+
+    </div>
         <br>
         {{ success_message }}
-        <a href="/logout">logout</a>
-        <br>
-        <a href="/delete_reviews">delete a review?</a>
     {%- endblock %}
-
-    im trying so hard. 
