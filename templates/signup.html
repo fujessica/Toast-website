@@ -10,12 +10,10 @@
     - password and username must be at least 8 characters and below 20 characters
     <br>
     - password must contain at least one number
-    <br>
-    <br>
-    {{ error_message }}
-    <br>
-    <br>
-    already have an account?
+{%- endblock %}
+{%block option-%}
+<br>
+already have an account?
 </br>
 <a href="/login">Log in</a>
-{%- endblock %}
+{%- endblock%}

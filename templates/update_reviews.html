@@ -22,6 +22,7 @@
             <br>
             <input type="submit" value="submit">
         </form>
-
-        {{ error_message }}
-{%- endblock %}
+        {% if error%}
+            {{ error_message }}
+        {% endif%}
+    {%- endblock %}

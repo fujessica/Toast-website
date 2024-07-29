@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, session, redirect, url_for, flash
+from flask import Flask, render_template, request, session, redirect, url_for, flash, get_flashed_messages
 from hashlib import sha256
 import sqlite3
 
@@ -52,25 +52,28 @@ def signup():
         password = request.form['password']
         if 20 > len(password) > 8 and 20 > len(username) > 8:
             # Mike Rhodes - Stack overflow verfication that username is not taken already
-            if username is not None:
-                error_message = 'username is taken'
-                return render_template('signup.html', error_message=error_message)
+            query = "SELECT username FROM users WHERE username = '{}'".format(
+                username)
+            result = sql_queries(query, 0)
+            if result is not None:
+                flash('username is taken')
+                return redirect(url_for('signup'))
             else:
                 password = hash_password(password)
                 query = "INSERT INTO users(username, password) VALUES('{}', '{}')".format(
                     username, password)
                 sql_queries(query, 2)
                 session['username'] = username
-                return redirect(url_for('homepage'))
+                return redirect(url_for('user_reviews'))
         elif len(username) < 8 or len(username) > 20:
-            error_message = 'username invalid'
-            return render_template('signup.html', error_message=error_message)
+            flash('username invalid')
+            return redirect(url_for('signup'))
         elif has_numbers(password) == False or len(password) > 20 or len(password) < 8:
-            error_message = 'password invalid'
-            return render_template('signup.html', error_message=error_message)
+            flash('password invalid')
+            return redirect(url_for('signup'))
         else:
-            error_message = 'what the sigma'
-            return render_template('signup.html', error_message=error_message)
+            flash('what the sigma')
+            return redirect(url_for('signup'))
 
 
 @app.route('/login', methods=['POST', 'GET'])
@@ -120,7 +123,7 @@ def create_review():
         return redirect(url_for('signup'))
     elif request.method == 'GET':
         query = "SELECT id, description from Toast EXCEPT SELECT t.id, t.description FROM Toast as t JOIN reviews AS r ON r.toast_id = t.id JOIN users AS u ON u.id = r.user_id WHERE u.username = '{}'".format(
-             session['username'])
+            session['username'])
         toasts = sql_queries(query, 1)
         return render_template('create_reviews.html', toasts=toasts)
     elif request.method == 'POST':
@@ -142,7 +145,7 @@ def create_review():
                 user_id, toast_review, toast_id)
             sql_queries(query, 2)
             return redirect(url_for('user_reviews'))
-        
+
 
 @app.route('/delete_reviews', methods=['GET', 'POST'])
 def delete_review():
@@ -179,12 +182,13 @@ def delete_review():
                 error_message = 'user authentification failed'
                 return render_template('delete_reviews.html', toasts=toasts, error_message=error_message)
 
+
 @app.route('/update_reviews', methods=['GET', 'POST'])
 def update_reviews():
     if request.method == 'GET':
         username = session['username']
         query = "SELECT t.id, description, review FROM reviews as r join users as u on r.user_id = u.id join Toast as t on r.toast_id = t.id WHERE u.username = '{}'".format(
-        username)
+            username)
         toasts = sql_queries(query, 1)
         return render_template('update_reviews.html', toasts=toasts)
     elif request.method == 'POST':
@@ -192,13 +196,14 @@ def update_reviews():
         review = request.form['review']
         query = "SELECT id FROM users WHERE username = '{}'".format(username)
         user_id = sql_queries(query, 0)[0]
-        query = ''' UPDATE Reviews SET review = "{}" WHERE toast_id = '{}' and user_id = '{}' '''.format(review, toast_id, user_id)
+        query = ''' UPDATE Reviews SET review = "{}" WHERE toast_id = '{}' and user_id = '{}' '''.format(
+            review, toast_id, user_id)
         connection = sqlite3.connect('toast.db')
         cursor = connection.cursor()
         cursor.execute(query)
         connection.commit()
         return redirect(url_for('user_reviews'))
-
+    
 
 @app.route('/logout')
 def logout():

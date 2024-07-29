@@ -23,9 +23,27 @@
                 <a href="/" class="object">Home</a>
             </div>
         </navbar>
+
         <main>
-            {% block main %}{% endblock %}
+            {% block main %} 
+            {% endblock %}
         </main>
+
+        {% with messages = get_flashed_messages() %}
+        {% if messages%}
+        <ul class="flashes">
+        {% for message in messages%}
+        <p>{{message}}</p>
+        {%endfor%}
+        </ul>
+        {%endif%}
+        {%endwith%} 
+
+        <p>
+            {% block option %}
+            {% endblock %}
+        </p>
+
         <footer>
             <p>Toast website :D</p>
         </footer>
