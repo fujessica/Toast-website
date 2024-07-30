@@ -1,14 +1,15 @@
 {% extends 'layout.html' %}
 {% block h1 -%}All Reviews{%- endblock %}
 {% block main -%}
+<div class="gridContainer">
     {% for review in reviews %}
-        <br>
+    <div class="gridItem">
         {{ review[0] }}
         <br>
         {{ review[1] }}
         <br>
-        {{ review[2] }}
-        <br>
-        <br>
+        {{review[2]}}
+    </div>
     {% endfor %}
+</div>
 {%- endblock %}

@@ -1,16 +1,17 @@
 {% extends 'layout.html' %}
 {% block h1 -%}Create review{%- endblock %}
-    {% block main -%}
-        <form name="Toast Reviewed" method="post">
-            <label>Select Toast</label>
-            <br>
-            <select name="toast_id">
-                {% for toast in toasts %}<option value="{{ toast[0] }}" SELECTED>{{ toast[1] }}</option>{% endfor %}
-            </select>
-            <br>
-            <textarea placeholder="write review" name="review"></textarea>
-            <br>
-            <input type="submit" value="submit">
-        </form>
-        {{ error_message }}
+{% block main -%}
+    <form name="Toast Reviewed" method="post">
+        <label>Select Toast</label>
+        <br>
+        <select name="toast_id">
+            {% for toast in toasts %}<option value="{{ toast[0] }}" SELECTED>{{ toast[1] }}</option>{% endfor %}
+        </select>
+        <br>
+        <textarea placeholder="write review" name="review" maxlength="800"></textarea>
+        <br>
+        <input type="submit" value="submit">
+        <br>
+        Review must be under 800 characters
+    </form>
 {%- endblock %}

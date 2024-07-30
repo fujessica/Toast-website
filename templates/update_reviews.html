@@ -18,11 +18,10 @@
                 {% endfor %}
             </select>
             <br>
-            <textarea name="review" id="amongus" >{{toasts[-1][2]}}</textarea>
+            <textarea name="review" id="amongus" maxlength="800">{{toasts[-1][2]}}</textarea>
             <br>
             <input type="submit" value="submit">
         </form>
-        {% if error%}
-            {{ error_message }}
-        {% endif%}
+
+        Review must be under 800 characters
     {%- endblock %}
