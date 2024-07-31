@@ -1,0 +1,10 @@
+{% extends 'layout.html' %}
+{% block h1 -%}test flash{%- endblock %}
+{% block main -%}
+
+<form action="/flashtest" method="post">
+    <input type="username" name="username" placeholder="Username">
+    <input type="submit" value="submit">
+</form>
+
+{%- endblock %}
