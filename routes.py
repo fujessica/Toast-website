@@ -106,9 +106,9 @@ def show_all_reviews():
 @app.route('/my_reviews')
 def my_reviews():
     if 'username' not in session or session['username'] is None:
-        return redirect(url_for('signup'))
+        return redirect(url_for('login'))
     else:
-        query = "SELECT t.description, r.review FROM reviews AS r JOIN Users as u ON r.user_id = u.id join Toast AS t ON t.id = r.toast_id WHERE username = ?"
+        query = "SELECT t.description, r.review, t.id FROM reviews AS r JOIN Users as u ON r.user_id = u.id join Toast AS t ON t.id = r.toast_id WHERE username = ?"
         username = session["username"]
         reviews = reversed(sql_queries(query, 1, (username, )))
         return render_template('my_reviews.html', reviews=reviews, username=username)
@@ -122,7 +122,11 @@ def create_review():
     elif request.method == 'GET':
         query = "SELECT id, description from Toast EXCEPT SELECT t.id, t.description FROM Toast as t JOIN reviews AS r ON r.toast_id = t.id JOIN users AS u ON u.id = r.user_id WHERE u.username = ?"
         toasts = sql_queries(query, 1, (username, ))
-        return render_template('create_reviews.html', toasts=toasts, username=username)
+        if len(toasts) == 0:
+            flash('you have reviewed all toasts available')
+            return redirect(url_for('my_reviews'))
+        else:
+            return render_template('create_reviews.html', toasts=toasts, username=username)
     elif request.method == 'POST':
         toast_id = request.form['toast_id']
         toast_review = request.form['review']
