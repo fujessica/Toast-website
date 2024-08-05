@@ -1,18 +1,24 @@
 {% extends 'layout.html' %}
 {% block h1 -%}Delete review{%- endblock %}
     {% block main -%}
+
+          <script>
+            function fetchReview(){
+                var e = document.getElementById("review");
+                document.getElementById("text").innerHTML = e.options[e.selectedIndex].getAttribute("review");
+            }
+        </script>
+
         <form action="/delete_reviews" method="post">
-            <input type="username" name="username" placeholder="Username">
-            <br>
-            <input type="password" name="password" placeholder="Password">
-            <br>
-            <select name="toast_id">
+            <select id="review"  name="toast_id" onchange="fetchReview()">
                 {% for toast in toasts %}
-                    <option value="{{ toast[0] }}" SELECTED>{{ toast[1] }}</option>
+                    <option value="{{ toast[0] }}" review="{{ toast[2] }}"SELECTED>{{ toast[1] }}</option>
                     <br>
                 {% endfor %}
             </select>
-            <input type="submit" value="submit">
+        
+            <p id="text" class="review_delete">{{toasts[-1][2]}}</p>
+
+            <input type="submit" value="delete">
         </form>
-        {{ error_message }}
     {%- endblock %}

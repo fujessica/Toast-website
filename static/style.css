@@ -25,6 +25,10 @@ body {
     color:black;
 }
 
+.headings{
+    text-decoration: none;
+    color:black;
+}
 
 /*Navbar*/
 
@@ -130,4 +134,18 @@ div.gridContainer {
 /* error messages */
 .flashes{
     padding-left:0%;
+}
+
+/* delete review */
+
+.review_delete{
+    z-index:0;
+    background-color:antiquewhite;
+    margin:20px;
+    position: relative; 
+    top: auto;
+    left:auto;
+    right:auto;
+    width:auto;
+    padding:35px;
 }

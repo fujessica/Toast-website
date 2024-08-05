@@ -41,7 +41,10 @@ def has_numbers(password):
 
 @app.route('/')
 def homepage():
-    return render_template('home.html')
+    if 'username' not in session or session['username'] is None:
+        return render_template('home.html')
+    else:
+        return redirect(url_for('show_all_reviews'))
 
 
 @app.route('/signup', methods=['POST', 'GET'])
@@ -149,25 +152,18 @@ def delete_review():
     else:
         if request.method == 'GET':
             username = session['username']
-            query = "SELECT t.id, description FROM reviews as r join users as u on r.user_id = u.id join Toast as t on r.toast_id = t.id WHERE u.username = ?"
+            query = "SELECT t.id, description, r.review FROM reviews as r join users as u on r.user_id = u.id join Toast as t on r.toast_id = t.id WHERE u.username = ?"
             toasts = sql_queries(query, 1, (username, ))
             return render_template('delete_reviews.html', toasts=toasts)
         elif request.method == 'POST':
-            username = request.form['username']
-            password = request.form['password']
-            password = hash_password(password)
-            query = "SELECT password FROM Users WHERE username = ?"
-            key = sql_queries(query, 0, (username, ))
-            if username == session['username'] and password == key[0]:
-                query = "SELECT id FROM Users WHERE username = ?"
-                user_id = sql_queries(query, 0, (username, ))[0]
-                toast_id = request.form['toast_id']
-                query = "DELETE FROM Reviews WHERE toast_id = ? and user_id =  ?"
-                sql_queries(query, 2, (toast_id, user_id))
-                return redirect(url_for('my_reviews'))
-            else:
-                flash('user authentification failed')
-                return redirect(url_for('delete_review'))
+            query = "SELECT id FROM Users WHERE username = ?"
+            username = session['username']
+            user_id = sql_queries(query, 0, (username, ))[0]
+            toast_id = request.form['toast_id']
+            query = "DELETE FROM Reviews WHERE toast_id = ? and user_id =  ?"
+            sql_queries(query, 2, (toast_id, user_id))
+            return redirect(url_for('my_reviews'))
+
 
 
 @app.route('/update_reviews', methods=['GET', 'POST'])
