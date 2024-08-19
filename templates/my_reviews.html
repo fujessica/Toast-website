@@ -1,9 +1,9 @@
 {% extends 'layout.html' %}
-{% block h1 -%}{{ username }}'s Reviews{%- endblock %}
     {% block main -%}
-    <div class="gridContainer">
+    <h1>{{ username }}'s Reviews</h1>
+    <div class="myRevGridContainer">
         {% for review in reviews %}
-        <div class="gridItem">
+        <div class="myRevGridItem">
             {{ review[0] }}
             <br>
             {{ review[1] }}
@@ -11,8 +11,6 @@
             <a class="my_reviews_buttons" href="/delete_reviews">delete</a><a class="my_reviews_buttons" href="/update_reviews">update</a>
         </div>
         {% endfor %}
-
         <a href="/logout">logout</a>
-
     </div>
     {%- endblock %}

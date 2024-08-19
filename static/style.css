@@ -1,34 +1,92 @@
 /* General */
 
+
 body {
     word-wrap: break-word;
-    padding:15px;
+    background-color: rgb(252, 252, 252);
+    margin:0%;
+    font-family:'calibri';
 }
 
+main{
+    width:1280px;
+    height:auto;
+    padding-left:70px;
+    padding-bottom:75px;
+}
+
+h1{
+    padding-top:75px;
+}
 /* homepage */
 
-.button {
-    background-color: #0c3358;
-    color: white;
-    padding: 10px;
-    text-decoration: none;
-    border-radius: 8px;
-    float: right;
-    font-size:14px;
+.grid-container{
+    padding-left:200px;
+    padding-top:50px;
+    padding-right:200px;
+    padding-bottom:100px;
+    display:grid;
+    grid-template-columns: 1fr 1fr;
+}
+
+.headingtext {
+    position: absolute;
+    top: 25%;
+    left: 40%;
+    color:rgb(255, 255, 255);
+    font-size:40px;
     font-family:'Arvo';
-    margin-right:400px;
+    fill: black;
+    text-shadow: 0.5px 0.5px 1px black;
 }
 
-.button:hover {
-    border:black;
-    background-color:#ddd;
-    color:black;
+.website-description{
+    text-align:center;
+    font-size:14px;
+    opacity:75%;
+    color:#000000
 }
 
-.headings{
+footer{
+    height:40px;
+    padding-top:5px;
+    background-color: #000000;
+    bottom:0;
+    width:100%;
+    position: fixed;
+    text-align:center;
+    color:white;
+    font-size:12px;
+}
+
+.signup{
+    padding-bottom:60px;
+}
+
+.homesignupimage{
+    padding-left:110px;
+    padding-top:100px;
+}
+
+.homeloginimage{
+    padding-left:80px;
+}
+
+.homebuttons{
     text-decoration: none;
-    color:black;
+    font:'Arvo';
+    background-color:#000000;
+    color:white;
+    padding:7px;
+    border-radius: 7px;
 }
+
+.homebuttons:hover{
+    background-color: rgb(211, 211, 211);
+    color:#000000;
+    
+}
+
 
 /*Navbar*/
 
@@ -39,7 +97,7 @@ nav.a {
     z-index: 100;
 }
 
-div {
+.navdiv {
     background-color: #000000;
     padding-right: 94.7%;
     position: fixed;
@@ -58,7 +116,7 @@ div {
     text-decoration: none;
     padding: 20px;
     padding-left: 13px;
-    font-size: 16px;
+    font-size: 18px;
     font-family: 'Arvo';
 }
 
@@ -74,25 +132,43 @@ div {
     text-align: center;
     text-decoration: none;
     padding: 20px;
-    padding-left: 13px;
-    font-size: 16px;
+    padding-left: 20px;
+    font-size: 18px;
     font-family: 'Arvo'
 
+}
+
+/* Login */
+.logingrid{
+    padding:30px;
+    display: block;
+    width: 100%;
+}
+
+
+.logingridcontainer{
+    align-items: center;
+    display:grid;
+    padding:70px;
+    grid-template-columns: 1fr 1fr;
+}
+
+.loginimage{
+    padding-top:100px;
 }
 
 /*Create reviews form*/
 
 textarea {
-    resize: none;
+    resize: none; 
     width: 1000px;
     height: 100px;
     font-family: Arial, Helvetica, sans-serif;
 }
 
-
 /* My Reviews */
 
-div.gridContainer {
+.myRevGridContainer {
     z-index:0;
     background-color:transparent;
     padding-right:15px;
@@ -104,16 +180,13 @@ div.gridContainer {
     margin:15px;
 }
 
-.gridItem {
+.myRevGridItem {
     z-index:0;
-    background-color:antiquewhite;
+    background-color:rgb(255, 255, 255);
     margin:20px;
     position: relative; 
-    top: auto;
-    left:auto;
-    right:auto;
-    width:auto;
-    padding:35px;
+    padding:40px;
+    box-shadow: 1px 0.5px 1px 1px rgb(99, 99, 99);
 }
 
 .my_reviews_buttons{
@@ -122,7 +195,7 @@ div.gridContainer {
     color:transparent;
 }
 
-.gridItem:hover .my_reviews_buttons{
+.myRevGridItem:hover .my_reviews_buttons{
     color: black;
     border-radius: 5px;
     padding: 5px;
@@ -133,7 +206,7 @@ div.gridContainer {
 
 /* error messages */
 .flashes{
-    padding-left:0%;
+    padding-top:100px;
 }
 
 /* delete review */
@@ -148,4 +221,34 @@ div.gridContainer {
     right:auto;
     width:auto;
     padding:35px;
+}
+
+/* allreviews */
+
+.allRevGridContainer {
+    z-index:0;
+    padding-right:30px;
+    margin:15px;
+}
+
+.allRevGridItem {
+    z-index:0;
+    background-color:rgb(255, 255, 255);
+    margin:20px;
+    padding:40px;
+    box-shadow: 1px 0.5px 1px 1px rgb(99, 99, 99);
+}
+
+.headingsfortoast{
+    display:grid;
+    grid-template-columns: 1fr 1fr;
+    padding:50px;
+    background-color:rgb(25, 24, 33);
+    color:white;
+    place-items: center;
+    font-size:26px;
+}
+
+.headingsimage{
+    padding-right:100px;
 }

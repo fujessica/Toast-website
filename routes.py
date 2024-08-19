@@ -6,7 +6,6 @@ import sqlite3
 app = Flask(__name__)
 app.secret_key = "super secret key"
 
-
 '''functions'''
 
 def sql_queries(query, option, data=None):
@@ -38,14 +37,11 @@ def has_numbers(password):
 
 '''routes'''
 
-
 @app.route('/')
-def homepage():
-    if 'username' not in session or session['username'] is None:
-        return render_template('home.html')
-    else:
-        return redirect(url_for('show_all_reviews'))
-
+def show_all_reviews():
+    query = "SELECT t.id, description, review, username, t.photo FROM Reviews as r JOIN Toast as t ON r.toast_id = t.id JOIN Users as u ON r.user_id = u.id and approval = 1 order by toast_id"
+    reviews = sql_queries(query, 1)
+    return render_template("reviews.html", reviews=reviews)
 
 @app.route('/signup', methods=['POST', 'GET'])
 def signup():
@@ -85,25 +81,18 @@ def login():
         password = request.form['password']
         hashed_password = hash_password(password)
         query = "SELECT password FROM users WHERE username = ?"
-        key = sql_queries(query, 0, (username,))[0]
-        if hashed_password == key:
-            session["username"] = username
-            return redirect(url_for('my_reviews'))
-        elif key is None:
+        key = sql_queries(query, 0, (username,))
+        if key is None:
             flash('user error')
             return redirect(url_for('login'))
-        elif hashed_password == key:
+        elif hashed_password == key[0]:
+            session["username"] = username
+            return redirect(url_for('my_reviews'))
+        elif hashed_password == key[0]:
             session["username"] = username
         else:
             flash('incorrect password')
             return redirect(url_for('login'))
-
-
-@app.route('/reviews')
-def show_all_reviews():
-    query = "SELECT description, review, username FROM Reviews as r JOIN Toast as t ON r.toast_id = t.id JOIN Users as u ON r.user_id = u.id and approval = 1"
-    reviews = reversed(sql_queries(query, 1))
-    return render_template("reviews.html", reviews=reviews)
 
 
 @app.route('/my_reviews')
@@ -187,12 +176,11 @@ def update_reviews():
             query = "UPDATE Reviews SET review = ?, approval = 0 WHERE toast_id = ? and user_id = ?"
             sql_queries(query, 2, (review, toast_id, user_id))
             return redirect(url_for('my_reviews'))
-        
 
 @app.route('/logout')
 def logout():
     session['username'] = None
-    return redirect(url_for('homepage'))
+    return redirect(url_for('show_all_reviews'))
 
 
 if __name__ == "__main__":

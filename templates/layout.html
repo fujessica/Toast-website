@@ -8,36 +8,31 @@
         <link rel="stylesheet" href="static/style.css">
     </head>
     <body>
-        <header>
-            <h1>
-                <br>
-                {% block h1 %}{% endblock %}
-            </h1>
-        </header>
 
         <navbar>
-            <div>
+            <div class="navdiv">
                 <a href="/" id="nav_toast">TOAST</a>
                 <a href="/login" class="object">Login</a>
                 <a href="/signup" class="object">Signup</a>
-                <a href="/reviews" class="object">Reviews</a>
-                <a href="/" class="object">Home</a>
+                <a href="/" class="object">Reviews</a>
             </div>
         </navbar>
 
     {% if session['username'] %}
         <navbar>
-            <div>
+            <div class="navdiv">
                 <a href="/" id="nav_toast">TOAST</a>
                 <a href="/logout" class="object">Logout</a>
                 <a href="/create_reviews" class="object">Create review</a>
                 <a href="/my_reviews" class="object">My Reviews</a>
-                <a href="/reviews" class="object">Reviews</a>
+                <a href="/" class="object">Reviews</a>
             </div>
         </navbar>
     {% endif %}
 
-        <main> 
+        <header>
+            {% block headerimage %}
+            {% endblock %}
             {% with messages = get_flashed_messages() %}
             {% if messages%}
             <ul class="flashes">
@@ -46,7 +41,10 @@
             {%endfor%}
             </ul>
             {%endif%}
-            {%endwith%} 
+            {%endwith%}
+        </header> 
+
+        <main> 
             {% block main %} 
             {% endblock %}
         </main>
@@ -57,7 +55,7 @@
         </p>
 
         <footer>
-            <p>Toast website :D</p>
+            <p>&copy;Jessica Fu, 2024</p>
         </footer>
     </body>
 </html>

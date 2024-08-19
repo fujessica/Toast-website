@@ -1,6 +1,9 @@
 {% extends 'layout.html' %}
-{% block h1 -%}Signup{%- endblock %}
 {% block main -%}
+    <h1>
+        Signup
+    </h1>
+
     <form action="/signup" method="post">
         <input type="username" name="username" placeholder="Username">
         <input type="password" name="password" placeholder="Password">
@@ -10,10 +13,9 @@
     - password and username must be at least 8 characters and below 20 characters
     <br>
     - password must contain at least one number
+
+    <br><br>
+    already have an account?
+    </br>
+    <a href="/login">Log in</a>
 {%- endblock %}
-{%block option-%}
-<br>
-already have an account?
-</br>
-<a href="/login">Log in</a>
-{%- endblock%}

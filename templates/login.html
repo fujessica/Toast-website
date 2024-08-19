@@ -1,23 +1,31 @@
 {% extends 'layout.html' %}
-{% block h1 -%}Login{%- endblock %}
+{% block headerimage -%}
+    <img class="headingimage" height="400px" width="1351px" src="/static/images/please.jpeg" alt="amongus">
+    <p class="website-description">This is a website for toast lovers that want to try new spreads or give their take on certain combinations of toast toppings.</p>
+    <div class="headingtext" >Read Toast Reviews</div>
+{%- endblock %}
 {% block main -%}
-  {% if session['username'] %}
-    You're logged in already!
-    Want to log out?
-    <a href="/logout">Logout?</a>
-  {% else %}
-    <form action="/login" method="post">
-      <input type="username" name="username" placeholder="Username">
-      <input type="password" name="password" placeholder="Password">
-      <input type="submit" value="Log in">
-    </form>
-    <br>
-
+<div class="logingridcontainer">
+  <div class="logingrid">
+    {% if session['username'] %}
+      You're logged in already!
+      Want to log out?
+      <a href="/logout">Logout?</a>
+    {% else %}
+      <h1>Login</h1>
+      <form action="/login" method="post">
+        <input type="username" name="username" placeholder="Username">
+        <input type="password" name="password" placeholder="Password">
+        <input type="submit" value="Log in">
+      </form>
+      <br>
+      don't have an account?
+      <br>
+      <a href="/signup">Sign up</a>
+  </div>
+  <div class="loginimage">
+    <img width="350px" height="350px" alt="toastwithgooglyeyes" src="/static/images/A_piece_of_toast_with_eyes.jpg">
+  </div>
+</div>
 {% endif %}
 {%- endblock %}
-
-{% block option -%}
-don't have an account?
-<br>
-<a href="/signup">Sign up</a>
-{%- endblock%}
