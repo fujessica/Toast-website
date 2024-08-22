@@ -18,16 +18,9 @@ main{
 h1{
     padding-top:75px;
 }
-/* homepage */
 
-.grid-container{
-    padding-left:200px;
-    padding-top:50px;
-    padding-right:200px;
-    padding-bottom:100px;
-    display:grid;
-    grid-template-columns: 1fr 1fr;
-}
+
+/* homepage */
 
 .headingtext {
     position: absolute;
@@ -61,30 +54,6 @@ footer{
 
 .signup{
     padding-bottom:60px;
-}
-
-.homesignupimage{
-    padding-left:110px;
-    padding-top:100px;
-}
-
-.homeloginimage{
-    padding-left:80px;
-}
-
-.homebuttons{
-    text-decoration: none;
-    font:'Arvo';
-    background-color:#000000;
-    color:white;
-    padding:7px;
-    border-radius: 7px;
-}
-
-.homebuttons:hover{
-    background-color: rgb(211, 211, 211);
-    color:#000000;
-    
 }
 
 
@@ -142,7 +111,6 @@ nav.a {
 .logingrid{
     padding:30px;
     display: block;
-    width: 100%;
 }
 
 
@@ -156,6 +124,19 @@ nav.a {
 .loginimage{
     padding-top:100px;
 }
+
+/* Signup */
+.signupgrid{
+    padding:30px;
+    display: block;
+}
+
+
+.signupgridcontainer{
+    align-items: center;
+    display:grid;
+    padding:70px;
+    grid-template-columns: 1fr 1fr}
 
 /*Create reviews form*/
 
@@ -204,14 +185,9 @@ textarea {
     background-color: white;
 } 
 
-/* error messages */
-.flashes{
-    padding-top:100px;
-}
-
 /* delete review */
 
-.review_delete{
+/* .review_delete{
     z-index:0;
     background-color:antiquewhite;
     margin:20px;
@@ -221,7 +197,7 @@ textarea {
     right:auto;
     width:auto;
     padding:35px;
-}
+} */
 
 /* allreviews */
 
@@ -251,4 +227,34 @@ textarea {
 
 .headingsimage{
     padding-right:100px;
+}
+
+
+
+
+
+
+
+
+
+.testgridcontainter{
+    padding-left:500px;
+    padding-right:500px;
+    border:black;
+}
+
+.testgriditem{
+    padding:50px;
+}
+
+.signupbutton{
+    color: white;
+    background-color:#000000;
+    padding:10px;
+    border:transparent;
+}
+
+.signupbutton:hover{
+    background-color:rgb(183, 183, 183);
+    color:black;
 }

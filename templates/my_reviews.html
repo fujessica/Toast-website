@@ -1,6 +1,13 @@
 {% extends 'layout.html' %}
     {% block main -%}
     <h1>{{ username }}'s Reviews</h1>
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+       {% for message in messages %}
+          {{ message }}
+       {% endfor %}
+    {% endif %}
+   {% endwith %}
     <div class="myRevGridContainer">
         {% for review in reviews %}
         <div class="myRevGridItem">

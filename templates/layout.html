@@ -33,26 +33,12 @@
         <header>
             {% block headerimage %}
             {% endblock %}
-            {% with messages = get_flashed_messages() %}
-            {% if messages%}
-            <ul class="flashes">
-            {% for message in messages%}
-            <p>{{message}}</p>
-            {%endfor%}
-            </ul>
-            {%endif%}
-            {%endwith%}
         </header> 
 
         <main> 
             {% block main %} 
             {% endblock %}
         </main>
-
-        <p>
-            {% block option %}
-            {% endblock %}
-        </p>
 
         <footer>
             <p>&copy;Jessica Fu, 2024</p>
