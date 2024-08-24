@@ -9,32 +9,22 @@
     </head>
     <body>
 
-        <navbar>
-            <div class="navdiv">
-                <a href="/" id="nav_toast">TOAST</a>
-                <a href="/login" class="object">Login</a>
-                <a href="/signup" class="object">Signup</a>
-                <a href="/" class="object">Reviews</a>
-            </div>
-        </navbar>
-
     {% if session['username'] %}
-        <navbar>
-            <div class="navdiv">
-                <a href="/" id="nav_toast">TOAST</a>
-                <a href="/logout" class="object">Logout</a>
-                <a href="/create_reviews" class="object">Create review</a>
-                <a href="/my_reviews" class="object">My Reviews</a>
-                <a href="/" class="object">Reviews</a>
-            </div>
-        </navbar>
+        <nav>
+            <a href="/" class="logo">TOAST</a>
+            <a href="/logout" class="navoption">Logout</a>
+            <a href="/create_reviews" class="navoption">Create review</a>
+            <a href="/my_reviews" class="navoption">My Reviews</a>
+            <a href="/" class="navoption">Reviews</a>
+        </nav>
+    {% else %}
+        <nav>
+            <a href="/" class="logo">TOAST</a>
+            <a href="/login" class="navoption">Login </a>
+            <a href="/signup" class="navoption">Signup </a>
+            <a href="/" class="navoption">Reviews</a>
+        </nav>
     {% endif %}
-
-        <header>
-            {% block headerimage %}
-            {% endblock %}
-        </header> 
-
         <main> 
             {% block main %} 
             {% endblock %}

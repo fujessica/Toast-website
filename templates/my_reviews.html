@@ -1,23 +1,31 @@
 {% extends 'layout.html' %}
     {% block main -%}
-    <h1>{{ username }}'s Reviews</h1>
-    {% with messages = get_flashed_messages() %}
-    {% if messages %}
-       {% for message in messages %}
-          {{ message }}
-       {% endfor %}
+        <h1>{{ username }}'s Reviews</h1>
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+           {% for message in messages %}
+              {{ message }}
+           {% endfor %}
+        {% endif %}
+       {% endwith %}
+       {% if reviews == [] %}
+            You have no reviews :C <br>
+            <img  height="400px" width="400px" alt="toastwitheyes" src="/static/images/A_piece_of_toast_with_eyes.jpg">
+       {% else %}
+       <div class="myRevGridContainer">
+             {% for review in reviews %}
+             <div class="myRevGridItem">
+            <div class="myrevtext"></div>
+                <br>
+                {{ review[0] }}
+                <br>
+                {{ review[1] }}
+            </div>
+            <div class="myrevphoto">
+                <img height="400px" width="400px" alt="toastphoto" src="{{review[3]}}">
+            </div>
+            </div>
+            {% endfor %}
+        </div> 
     {% endif %}
-   {% endwith %}
-    <div class="myRevGridContainer">
-        {% for review in reviews %}
-        <div class="myRevGridItem">
-            {{ review[0] }}
-            <br>
-            {{ review[1] }}
-            <br>
-            <a class="my_reviews_buttons" href="/delete_reviews">delete</a><a class="my_reviews_buttons" href="/update_reviews">update</a>
-        </div>
-        {% endfor %}
-        <a href="/logout">logout</a>
-    </div>
     {%- endblock %}

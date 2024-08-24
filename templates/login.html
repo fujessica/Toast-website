@@ -4,60 +4,35 @@
 You're logged in already!
 Want to log out?
 <a href="/logout">Logout?</a>
+{% else %}
 <div class="testgridcontainter">
-  <div class="testgriditem">
-  <h1>Login</h1>
-      <form action="/login" method="post">
-        <input type="username" name="username" placeholder="Username">
-        <input type="password" name="password" placeholder="Password">
-        <input type="submit" value="Log in">
-      </form>
-      <br>
-      {% with messages = get_flashed_messages() %}
-      {% if messages %}
-         {% for message in messages %}
-            {{ message }}
-         {% endfor %}
-      {% endif %}
-     {% endwith %}
-      <br>
-      <br>
-      don't have an account?
-      <br>
-      <a href="/signup">Sign up</a>
+    <div class="testgriditem">
+        <div class="innerdiv">
+        <h1>Login</h1>
+        <form action="/login" method="post">
+            Username
+            <input type="username" name="username">
+            <br><br>
+            Password
+            <input type="password" name="password" width="20px">
+            <br><br>
+            <input type="submit" value="Login" class="signupbutton">
+            <br>
+            <br>
+            {% with messages = get_flashed_messages() %}
+            {% if messages %}
+            {% for message in messages %}
+                {{ message }}
+            {% endfor %}
+            {% endif %}
+        {% endwith %}
+        <br>
+        don't have an account?
+        <br>
+        <a href="/signup">Sign up</a>
+    </form>
     </div>
-  </div>
+    </div>
+</div>
 {% endif %}
 {%- endblock %}
-
-<div class="logingridcontainer">
-  <div class="logingrid">
-    {% if session['username'] %}
-      You're logged in already!
-      Want to log out?
-      <a href="/logout">Logout?</a>
-    {% else %}
-      <h1>Login</h1>
-      <form action="/login" method="post">
-        <input type="username" name="username" placeholder="Username">
-        <input type="password" name="password" placeholder="Password">
-        <input type="submit" value="Log in">
-      </form>
-      <br>
-      {% with messages = get_flashed_messages() %}
-      {% if messages %}
-         {% for message in messages %}
-            {{ message }}
-         {% endfor %}
-      {% endif %}
-     {% endwith %}
-      <br>
-      <br>
-      don't have an account?
-      <br>
-      <a href="/signup">Sign up</a>
-  </div>
-  <div class="loginimage">
-    <img width="350px" height="350px" alt="toastwithgooglyeyes" src="/static/images/A_piece_of_toast_with_eyes.jpg">
-  </div>
-</div>

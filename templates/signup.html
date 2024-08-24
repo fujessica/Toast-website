@@ -1,44 +1,14 @@
 {% extends 'layout.html' %}
-<div class="signupgrid">
-    {% if session['username'] %}
-      You're logged in already!
-      Want to log out?
-      <a href="/logout">Logout?</a>
-    {% else %}
-      <div class="signupgridcontainer">
-      <div class="signupimage">
-          <img width="200px" height="200px" alt="signup" src="/static/images/signup.png">
-      </div>
-      <div>
-      <h1>Signup</h1>
-      <form action="/signup" method="post">
-          <input type="username" name="username" placeholder="Username">
-          <input type="password" name="password" placeholder="Password">
-          <input type="submit" value="Sign up">
-          <br>
-          <br>
-          {% with messages = get_flashed_messages() %}
-          {% if messages %}
-             {% for message in messages %}
-                {{ message }}
-             {% endfor %}
-          {% endif %}
-         {% endwith %}
-         <br>
-         don't have an account?
-         <br>
-         <a href="/signup">Sign up</a>
-      </form>
-      </div>
-  </div>
-</div>
-{%endif%}
 {% block main -%}
-
+{% if session['username'] %}
+You're logged in already!
+Want to log out?
+<a href="/logout">Logout?</a>
+{% else %}
 <div class="testgridcontainter">
     <div class="testgriditem">
+        <div class="innerdiv">
     <h1>Signup</h1>
-
     <form action="/signup" method="post">
         Username
         <input type="username" name="username">
@@ -47,8 +17,7 @@
         <input type="password" name="password" width="20px">
         <br><br>
         <input type="submit" value="Sign up" class="signupbutton">
-        <br>
-        <br>
+        <br><br>
         {% with messages = get_flashed_messages() %}
         {% if messages %}
         {% for message in messages %}
@@ -56,12 +25,13 @@
         {% endfor %}
         {% endif %}
     {% endwith %}
+    <br><br>
+    Already have an account?
     <br>
-    don't have an account?
-    <br>
-    <a href="/signup">Sign up</a>
+    <a href="/login">Log in</a>
     </form>
     </div>
+    </div>
 </div>
-
+{% endif %}
 {%- endblock %}

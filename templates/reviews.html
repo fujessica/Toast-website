@@ -1,11 +1,8 @@
 {% extends 'layout.html' %}
-{% block headerimage -%}
-    <img class="headingimage" height="400px" width="1351px" src="/static/images/please.jpeg" alt="amongus">
-    <p class="website-description">This is a website for toast lovers that want to try new spreads or give their take on certain combinations of toast toppings.</p>
-    <div class="headingtext" >Read Toast Reviews</div>
-{%- endblock %}
 {% block main -%}
-<br>
+<img class="headingimage" width="100%" height="400px" src="/static/images/please.jpeg" alt="toastheader">
+<p class="website-description">This is a website for toast lovers that want to try new spreads or give their take on certain combinations of toast toppings.</p>
+<div class="headingtext" >Read Toast Reviews</div>
 <div class="allRevGridContainer">
     {% for review in reviews %}
     {% if loop.previtem is undefined or loop.previtem is defined and review[0] != loop.previtem[0] %}

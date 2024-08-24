@@ -100,9 +100,9 @@ def my_reviews():
     if 'username' not in session or session['username'] is None:
         return redirect(url_for('login'))
     else:
-        query = "SELECT t.description, r.review, t.id FROM reviews AS r JOIN Users as u ON r.user_id = u.id join Toast AS t ON t.id = r.toast_id WHERE username = ?"
+        query = "SELECT t.description, r.review, t.id, t.photo FROM reviews AS r JOIN Users as u ON r.user_id = u.id join Toast AS t ON t.id = r.toast_id WHERE username = ?"
         username = session["username"]
-        reviews = reversed(sql_queries(query, 1, (username, )))
+        reviews = (sql_queries(query, 1, (username, )))
         return render_template('my_reviews.html', reviews=reviews, username=username)
 
 

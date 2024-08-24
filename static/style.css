@@ -6,21 +6,15 @@ body {
     background-color: rgb(252, 252, 252);
     margin:0%;
     font-family:'calibri';
+    height:auto;
 }
 
 main{
-    width:1280px;
     height:auto;
-    padding-left:70px;
-    padding-bottom:75px;
-}
-
-h1{
-    padding-top:75px;
 }
 
 
-/* homepage */
+/* allrevs */
 
 .headingtext {
     position: absolute;
@@ -44,99 +38,46 @@ footer{
     height:40px;
     padding-top:5px;
     background-color: #000000;
-    bottom:0;
     width:100%;
-    position: fixed;
+    position: sticky;
     text-align:center;
     color:white;
     font-size:12px;
 }
 
-.signup{
-    padding-bottom:60px;
-}
-
 
 /*Navbar*/
 
-
-nav.a {
-    text-decoration: none;
-    color:black;
-    z-index: 100;
-}
-
-.navdiv {
-    background-color: #000000;
-    padding-right: 94.7%;
+nav{
+    height: 60px;
+    background-color:black;
+    z-index:2000000;
     position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    width: 100%;
-    z-index: 100;
+    width:100%;
 }
 
-.object {
-    float: right;
-    display: block;
-    color: #f2f2f2;
-    text-align: center;
-    text-decoration: none;
-    padding: 20px;
-    padding-left: 13px;
-    font-size: 18px;
-    font-family: 'Arvo';
+.navoption{
+    float:right;
+    text-decoration:none;
+    padding:1.35%;
+    font:"arvo";
+    color:white;
+    font-size:20px;
 }
 
-.object:hover {
-    background: #ddd;
-    color: black;
+.logo{
+    float:left;
+    text-decoration:none;
+    padding:1.35%;
+    font:"arvo";
+    color:white;
+    font-size:20px;
 }
 
-#nav_toast {
-    float: left;
-    display: block;
-    color: #f2f2f2;
-    text-align: center;
-    text-decoration: none;
-    padding: 20px;
-    padding-left: 20px;
-    font-size: 18px;
-    font-family: 'Arvo'
-
+.navoption:hover{
+    color:black;
+    background-color:white;
 }
-
-/* Login */
-.logingrid{
-    padding:30px;
-    display: block;
-}
-
-
-.logingridcontainer{
-    align-items: center;
-    display:grid;
-    padding:70px;
-    grid-template-columns: 1fr 1fr;
-}
-
-.loginimage{
-    padding-top:100px;
-}
-
-/* Signup */
-.signupgrid{
-    padding:30px;
-    display: block;
-}
-
-
-.signupgridcontainer{
-    align-items: center;
-    display:grid;
-    padding:70px;
-    grid-template-columns: 1fr 1fr}
 
 /*Create reviews form*/
 
@@ -150,29 +91,30 @@ textarea {
 /* My Reviews */
 
 .myRevGridContainer {
-    z-index:0;
-    background-color:transparent;
-    padding-right:15px;
-    position:relative;
-    top:auto;
-    left:auto;
-    right:auto;
-    width:auto;
-    margin:15px;
+    padding:60px;
+    display:grid;
+    grid-template-columns: 1fr 1fr;
+
 }
 
 .myRevGridItem {
-    z-index:0;
     background-color:rgb(255, 255, 255);
-    margin:20px;
-    position: relative; 
-    padding:40px;
     box-shadow: 1px 0.5px 1px 1px rgb(99, 99, 99);
+    margin:0px;
+    padding:40px;
+    height:81vh;
+
 }
 
-.my_reviews_buttons{
+.allrevtext{
+    display:grid;
+    grid-template-columns: 1fr 1fr;
+    margin:50vh;
+    margin-bottom:auto;
+}
+
+/* .my_reviews_buttons{
     padding-left:10px;
-    float:right;
     color:transparent;
 }
 
@@ -183,7 +125,7 @@ textarea {
     text-decoration: none;
     margin-right:20px;
     background-color: white;
-} 
+}  */
 
 /* delete review */
 
@@ -203,8 +145,7 @@ textarea {
 
 .allRevGridContainer {
     z-index:0;
-    padding-right:30px;
-    margin:15px;
+    padding:75px;
 }
 
 .allRevGridItem {
@@ -218,33 +159,41 @@ textarea {
 .headingsfortoast{
     display:grid;
     grid-template-columns: 1fr 1fr;
-    padding:50px;
     background-color:rgb(25, 24, 33);
     color:white;
     place-items: center;
     font-size:26px;
+    height: 300px;
 }
 
 .headingsimage{
-    padding-right:100px;
+    margin-left:auto;
+    margin-right:auto;
 }
-
-
-
-
-
 
 
 
 
 .testgridcontainter{
-    padding-left:500px;
-    padding-right:500px;
-    border:black;
+    background-image:url("/static/images/backgroundhope.jpg");
+    height:100vh;
 }
 
 .testgriditem{
-    padding:50px;
+    transform: translateY(40%);
+    justify-items:auto;
+    margin-left:35%;
+    margin-right:35%;
+    background:white;
+    border-radius:10px;
+    box-shadow: 1px 1px 2px 2px rgb(38, 38, 43);
+    
+}
+
+.innerdiv{
+    padding-left:60px;
+    padding-top:40px;
+    padding-bottom:50px;
 }
 
 .signupbutton{
