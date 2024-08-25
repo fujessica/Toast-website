@@ -10,6 +10,7 @@
     <body>
 
     {% if session['username'] %}
+        <div class="navdiv">
         <nav>
             <a href="/" class="logo">TOAST</a>
             <a href="/logout" class="navoption">Logout</a>
@@ -17,20 +18,23 @@
             <a href="/my_reviews" class="navoption">My Reviews</a>
             <a href="/" class="navoption">Reviews</a>
         </nav>
+        </div>
     {% else %}
+        <div class="navdiv">
         <nav>
             <a href="/" class="logo">TOAST</a>
             <a href="/login" class="navoption">Login </a>
             <a href="/signup" class="navoption">Signup </a>
             <a href="/" class="navoption">Reviews</a>
         </nav>
+        </div>
     {% endif %}
         <main> 
             {% block main %} 
             {% endblock %}
         </main>
 
-        <footer>
+        <footer class="footerdiv">
             <p>&copy;Jessica Fu, 2024</p>
         </footer>
     </body>

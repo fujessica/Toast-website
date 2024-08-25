@@ -1,26 +1,28 @@
 {% extends 'layout.html' %}
 {% block main -%}
-    <h1 class="createreviewheading">Create review</h1>
+<div class="createRevGridContainer">
+    <h1>Create review</h1>
     <form name="Toast Reviewed" method="post">
         <label>Select Toast</label>
         <br>
-        <select name="toast_id">
+        <select name="toast_id" class="selecttoast">
             {% for toast in toasts %}<option value="{{ toast[0] }}" SELECTED>{{ toast[1] }}</option>{% endfor %}
         </select>
         <br>
         <textarea placeholder="write review" name="review" maxlength="800"></textarea>
         <br>
+        <input type="submit" value="submit" class="signupbutton">
+        <br>
         Review must be under 800 characters
-        <input type="submit" value="submit">
+        {% with messages = get_flashed_messages() %}
+        {% if messages%}
+        <ul>
+        {% for message in messages%}
+        <p>{{message}}</p>
+        {%endfor%}
+        </ul>
+        {%endif%}
+        {%endwith%}
     </form>
-
-    {% with messages = get_flashed_messages() %}
-    {% if messages%}
-    <ul class="flashes">
-    {% for message in messages%}
-    <p>{{message}}</p>
-    {%endfor%}
-    </ul>
-    {%endif%}
-    {%endwith%}
+</div>
 {%- endblock %}

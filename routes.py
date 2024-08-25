@@ -153,8 +153,6 @@ def delete_review():
             sql_queries(query, 2, (toast_id, user_id))
             return redirect(url_for('my_reviews'))
 
-
-
 @app.route('/update_reviews', methods=['GET', 'POST'])
 def update_reviews():
     if request.method == 'GET':
@@ -163,10 +161,13 @@ def update_reviews():
         toasts = sql_queries(query, 1, (username, ))
         return render_template('update_reviews.html', toasts=toasts)
     elif request.method == 'POST':
-        if len(request.form['review']) >= 800:
+        review = request.form['review']
+        if len(review) >= 800:
+            flash('review too long')
             return redirect(url_for('update_reviews'))
-        elif len(request.form['review']) == 0:
+        elif len(review) == 0:
             flash('message can not be blank')
+            return redirect (url_for('update_reviews'))
         else:
             username = session['username']
             toast_id = request.form['toast_id']

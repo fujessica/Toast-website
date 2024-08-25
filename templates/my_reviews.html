@@ -1,5 +1,15 @@
 {% extends 'layout.html' %}
     {% block main -%}
+       {% if reviews == [] %}
+            <div class="norevgridcontainer">
+            <h1>{{ username }}'s Reviews</h1>
+            <div class="myRevGridItem">
+            <div class="norevtext">You have no reviews :C</div>	
+            <img  height="400px" width="400px" alt="toastwitheyes" src="/static/images/A_piece_of_toast_with_eyes.jpg">
+            </div>
+        </div>
+       {% else %}
+       <div class="myRevGridContainer">
         <h1>{{ username }}'s Reviews</h1>
         {% with messages = get_flashed_messages() %}
         {% if messages %}
@@ -8,22 +18,20 @@
            {% endfor %}
         {% endif %}
        {% endwith %}
-       {% if reviews == [] %}
-            You have no reviews :C <br>
-            <img  height="400px" width="400px" alt="toastwitheyes" src="/static/images/A_piece_of_toast_with_eyes.jpg">
-       {% else %}
-       <div class="myRevGridContainer">
              {% for review in reviews %}
              <div class="myRevGridItem">
-            <div class="myrevtext"></div>
-                <br>
-                {{ review[0] }}
-                <br>
-                {{ review[1] }}
-            </div>
-            <div class="myrevphoto">
-                <img height="400px" width="400px" alt="toastphoto" src="{{review[3]}}">
-            </div>
+                <div class="myrevphoto">
+                    <img height="300px" width="400px" alt="toastphoto" src="{{review[3]}}">
+                </div>
+                <div class="myrevtext">
+                    <br>
+                    {{ review[0] }}
+                    <br>
+                    {{ review[1] }}
+                    <br><br>
+                    <a class="myrevbuttons" href="/update_reviews">Update</a>
+                    <a class="myrevbuttons" href="/delete_reviews">Delete</a>
+                </div>
             </div>
             {% endfor %}
         </div> 
