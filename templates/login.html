@@ -1,9 +1,13 @@
 {% extends 'layout.html' %}
 {% block main -%}
 {% if session['username'] %}
-You're logged in already!
-Want to log out?
-<a href="/logout">Logout?</a>
+<div class="norevgridcontainer">
+    <div class="allRevGridItem">
+    You're logged in already!
+    Want to log out?
+    <a href="/logout">Logout?</a>
+</div>
+</div>
 {% else %}
 <div class="testgridcontainter">
     <div class="testgriditem">
@@ -27,14 +31,14 @@ Want to log out?
                 {{ message }}
             {% endfor %}
             {% endif %}
-        {% endwith %}
-        <br>
-        don't have an account?
-        <br>
-        <a href="/signup">Sign up</a>
-    </form>
+            {% endwith %}
+            <br><br>
+            don't have an account?
+            <br>
+            <a href="/signup">Sign up</a>
+        </form>
+        </div>
+        </div>
     </div>
-    </div>
-</div>
-{% endif %}
+    {% endif %}
 {%- endblock %}
