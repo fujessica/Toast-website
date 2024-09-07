@@ -52,7 +52,10 @@ def signup():
     elif request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
-        if 20 >= len(password) >= 8 and 20 >= len(username) >= 8 and has_numbers(password):
+        if 20 >= len(password
+                     ) >= 8 and 20 >= len(username
+                                          ) >= 8 and has_numbers(password
+                                                                 ) is True:
             query = "SELECT username FROM users WHERE username = ?"
             result = sql_queries(query, 0, (username,))
             if result is not None:
@@ -63,11 +66,13 @@ def signup():
                 password = hash_password(password)
                 query = "INSERT INTO users(username, password) VALUES(?, ?)"
                 sql_queries(query, 2, (username, password))
+                query = "SELECT id FROM Users WHERE username = ?"
+                session['user_id'] = sql_queries(query, 0, (username,))[0]
                 return redirect(url_for('my_reviews'))
         elif len(username) < 8 or len(username) > 20:
             flash('8< username <20 characters')
             return redirect(url_for('signup'))
-        elif has_numbers(password) == False:
+        elif has_numbers(password) is False:
             flash('password needs 1 number')
             return redirect(url_for('signup'))
         elif len(password) > 20 or len(password) < 8:
@@ -83,19 +88,17 @@ def login():
     if request.method == 'GET':
         return render_template('login.html')
     elif request.method == 'POST':
-        username = request.form['username']
-        password = request.form['password']
-        hashed_password = hash_password(password)
+        hashed_password = hash_password(request.form['password'])
         query = "SELECT password FROM users WHERE username = ?"
-        key = sql_queries(query, 0, (username,))
+        key = sql_queries(query, 0, (request.form['username'],))
         if key is None:
             flash('incorrect username or password')
             return redirect(url_for('login'))
         elif hashed_password == key[0]:
-            session["username"] = username
+            session['username'] = request.form['username']
+            query = "SELECT id FROM Users WHERE username = ?"
+            session['user_id'] = sql_queries(query, 0, (session['username'],))[0]
             return redirect(url_for('my_reviews'))
-        elif hashed_password == key[0]:
-            session["username"] = username
         else:
             flash('incorrect username or password')
             return redirect(url_for('login'))
@@ -121,18 +124,17 @@ def create_review():
     if 'username' not in session:
         return redirect(url_for('signup'))
     elif request.method == 'GET':
-        username = session['username']
         query = "SELECT id, description from Toast EXCEPT \
                  SELECT t.id, t.description FROM Toast as t \
                  JOIN reviews AS r ON r.toast_id = t.id JOIN users \
                  AS u ON u.id = r.user_id WHERE u.username = ?"
-        toasts = sql_queries(query, 1, (username, ))
+        toasts = sql_queries(query, 1, (session['username'], ))
         if len(toasts) == 0:
             flash('you have reviewed all toasts available')
             return redirect(url_for('my_reviews'))
         else:
             return render_template('create_reviews.html', toasts=toasts,
-                                   username=username)
+                                   username=session['username'])
     elif request.method == 'POST':
         toast_id = request.form['toast_id']
         toast_review = request.form['review']
@@ -140,11 +142,9 @@ def create_review():
             flash('review can not be blank')
             return redirect(url_for('create_review'))
         else:
-            user_id_query = "SELECT id FROM users WHERE username = ?"
-            user_id = sql_queries(user_id_query, 0, (session['username'], ))[0]
             query = "INSERT INTO reviews(user_id, review, toast_id, approval)\
                      VALUES(?, ?, ?, ?)"
-            sql_queries(query, 2, (user_id, toast_review, toast_id, 0))
+            sql_queries(query, 2, (session['user_id'], toast_review, toast_id, 0))
             flash('your review is being reviewed(haha)')
             return redirect(url_for('my_reviews'))
 
@@ -165,12 +165,9 @@ def delete_review():
             else:
                 return render_template('delete_reviews.html', toasts=toasts)
         elif request.method == 'POST':
-            query = "SELECT id FROM Users WHERE username = ?"
-            username = session['username']
-            user_id = sql_queries(query, 0, (username, ))[0]
             toast_id = request.form['toast_id']
             query = "DELETE FROM Reviews WHERE toast_id = ? and user_id =  ?"
-            sql_queries(query, 2, (toast_id, user_id))
+            sql_queries(query, 2, (toast_id, session['user_id']))
             flash('review deleted')
             return redirect(url_for('my_reviews'))
 
@@ -194,14 +191,11 @@ def update_reviews():
                 flash('review can not be blank')
                 return redirect(url_for('update_reviews'))
             else:
-                username = session['username']
                 toast_id = request.form['toast_id']
                 review = request.form['review']
-                query = "SELECT id FROM users WHERE username = ?"
-                user_id = sql_queries(query, 0, (username,))[0]
                 query = "UPDATE Reviews SET review = ?, approval = 0 \
                          WHERE toast_id = ? and user_id = ?"
-                sql_queries(query, 2, (review, toast_id, user_id))
+                sql_queries(query, 2, (review, toast_id, session['user_id']))
                 flash('your review is being reviewed haha')
                 return redirect(url_for('my_reviews'))
 
