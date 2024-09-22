@@ -77,9 +77,9 @@ nav{
 
 .website-description{
     text-align:center;
-    font-size:14px;
+    font-size:16px;
     opacity:75%;
-    color:#000000
+    color:#000000;
 }
 
 .allRevGridContainer {
@@ -112,8 +112,7 @@ nav{
 }
 
 .headingsimage{
-    margin-left:auto;
-    margin-right:auto;
+    font-size:0;
 }
 
 /* My Reviews */
@@ -132,7 +131,6 @@ nav{
     display:grid;
     grid-template-columns: 1fr 1fr;
     height:min-content;
-    padding-bottom:0.5%;
     margin-bottom: 2.5%;
     background-color: white;
 }
@@ -145,9 +143,9 @@ nav{
 }
 
 .myrevphoto{
-    width:100px;
-    align-items:center;
-    justify-content: center;
+    margin-top:auto;
+    margin-bottom:auto;
+    font-size:0;
 }
 
 .myrevbuttons{
@@ -196,6 +194,7 @@ nav{
 .innerdiv{
     padding-left:27%;
     padding-top:40px;
+    padding-right:27%;
     padding-bottom:50px;
 }
 
@@ -235,4 +234,12 @@ ul{
     margin-bottom:5%;
     height:min-content;
     min-height:74vh;
+}
+
+/* Flashes */
+.flashes{
+    color:white;
+    background-color:red;
+    padding:7px;
+    margin:0%;
 }

@@ -4,7 +4,9 @@
     <script>
         function fetchReview(){
             var e = document.getElementById("review");
+            // grab the index of the toast selected then get the attribute "review" from it
             document.getElementById("text").value = e.options[e.selectedIndex].getAttribute("review");
+            // Put it in textarea
         }
     </script>
 
