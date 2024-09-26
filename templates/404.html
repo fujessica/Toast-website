@@ -1,23 +1,13 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <title>Toast Website</title>
-    <meta name="description" content="Jessica's website for toast reviews">
-    <meta name="keywords" content="toast, review">
-</head>
-<header>
-    <style>
-        body{
-            text-align:center;
-            padding-top:90px;
-            font-size:40px;
-            font-family:'calibri';
-        }
-    </style>
-</header>
-
-<body>
-    Error 404<br>
-    page not found
-</body>
-</html>
+{% extends 'layout.html' %}
+{% block main -%}
+<div class="noPageGridContainer">
+    <div class="noPageText">
+        <h1>
+            Error 404
+        </h1>
+        <p>
+            Page not found :C<br>
+        </p>
+    </div>
+</div>
+{%- endblock %}

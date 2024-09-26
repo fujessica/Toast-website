@@ -5,19 +5,19 @@
     <form name="Toast Reviewed" method="post">
         <label>Select Toast</label>
         <br>
-        <select name="toast_id" class="selecttoast">
+        <select name="toast_id" class="selectToast">
             {% for toast in toasts %}<option value="{{ toast[0] }}" SELECTED>{{ toast[1] }}</option>{% endfor %}
         </select>
         <br>
         <textarea placeholder="write review" name="review" maxlength="800"></textarea>
         <br>
-        <input type="submit" value="submit" class="signupbutton">
+        <input type="submit" value="Submit" class="signupButton">
         <br>
         Review must be under 800 characters
         {% with messages = get_flashed_messages() %}
         {% if messages%}
         {% for message in messages%}
-        <p>{{message}}</p>
+        <p class="flashes1">{{message}}</p>
         {%endfor%}
         {%endif%}
         {%endwith%}

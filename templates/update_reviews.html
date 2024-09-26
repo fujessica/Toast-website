@@ -1,36 +1,19 @@
 {% extends 'layout.html' %}
 {% block main -%}
 
-    <script>
-        function fetchReview(){
-            var e = document.getElementById("review");
-            // grab the index of the toast selected then get the attribute "review" from it
-            document.getElementById("text").value = e.options[e.selectedIndex].getAttribute("review");
-            // Put it in textarea
-        }
-    </script>
-
     <div class="createRevGridContainer">
     <h1 class="updatereviewheading">Update review</h1>
     <form name="Toast Reviewed" method="post">
-        <label>Select Toast</label>
-        <br>
-        <select id="review" name="toast_id" onchange="fetchReview()" class="selecttoast">
-            {% for toast in toasts %}
-            <option value="{{ toast[0] }}" review="{{ toast[2] }}" SELECTED>{{ toast[1] }}</option>
-            {% endfor %}
-        </select>
-        <br>
-        <textarea name="review" id="text" maxlength="800">{{toasts[-1][2]}}</textarea>
-        <br>
-        <input type="submit" value="submit" class="signupbutton">
+        <h3><input name="toast_id" type="hidden" value="{{data[0]}}" >{{data[1]}}</h3>
+        <textarea name="review" id="text" maxlength="800">{{data[2]}}</textarea>
+        <input type="submit" value="Submit" class="signupbutton">
         <br>
         Review must be under 800 characters
         {% with messages = get_flashed_messages() %}
         {% if messages%}
         <ul>
         {% for message in messages%}
-        <p>{{message}}</p>
+        <p class="editingFlashes">{{message}}</p>
         {%endfor%}
         </ul>
         {%endif%}
@@ -38,3 +21,4 @@
     </form>
     </div>
 {%- endblock %}
+

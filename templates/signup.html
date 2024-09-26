@@ -1,30 +1,28 @@
 {% extends 'layout.html' %}
 {% block main -%}
 {% if session['username'] %}
-<div class="norevgridcontainer">
+<div class="noRevGridContainer">
     <div class="allRevGridItem">
     You're logged in already!
     Want to log out?
     <a href="/logout">Logout?</a>
+    </div>
 </div>
-</div>
-Want to log out?
-<a href="/logout">Logout?</a>
 {% else %}
-<div class="testgridcontainter">
-    <div class="testgriditem">
-        <div class="innerdiv">
+<div class="testGridContainter">
+    <div class="testGridItem">
+        <div class="innerDiv">
     <h1>Signup</h1>
     <form action="/signup" method="post">
         Username
         <br>
-        <input type="username" name="username">
+        <input type="username" name="username" minlength=8 maxlength=30>
         <br><br>
         Password
         <br>
-        <input type="password" name="password" width="20px">
+        <input type="password" name="password" width="20px" minlength=8 maxlength=30>
         <br><br>
-        <input type="submit" value="Sign up" class="signupbutton">
+        <input type="submit" value="Sign up" class="signupButton">
         <br><br>
         {% with messages = get_flashed_messages() %}
         {% if messages %}
@@ -33,10 +31,9 @@ Want to log out?
         {% endfor %}
         {% endif %}
     {% endwith %}
-    <br><br>
     Already have an account?
-    <br>
     <a href="/login">Log in</a>
+    <br>
     </form>
     </div>
     </div>

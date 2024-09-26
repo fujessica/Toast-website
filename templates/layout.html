@@ -5,27 +5,40 @@
         <meta name="description" content="Jessica's website for toast reviews">
         <meta name="keywords" content="toast, review">
         <link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Arvo'>
+        <link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Arvo'>
         <link rel="stylesheet" href="static/style.css">
     </head>
     <body>
 
-    {% if session['username'] %}
-        <div class="navdiv">
+    {% if session['admin'] == '1'%}
+        <div class="navDiv">
         <nav>
             <a href="/" class="logo">TOAST</a>
-            <a href="/logout" class="navoption">Logout</a>
-            <a href="/create_reviews" class="navoption">Create review</a>
-            <a href="/my_reviews" class="navoption">My Reviews</a>
-            <a href="/" class="navoption">Reviews</a>
+            <a href="/logout" class="navOption">Logout</a>
+            <a href="/create_reviews" class="navOption">Create review</a>
+            <a href="/my_reviews" class="navOption">My Reviews</a>
+            <a href="/" class="navOption">Reviews</a>
+            <a href="/admin" class="navOption">Admin</a>
         </nav>
         </div>
+    {% elif session['username'] %}
+        <div class="navDiv">
+            <nav>
+                <a href="/" class="logo">TOAST</a>
+                <a href="/logout" class="navOption">Logout</a>
+                <a href="/create_reviews" class="navOption">Create review</a>
+                <a href="/my_reviews" class="navOption">My Reviews</a>
+                <a href="/" class="navOption">Reviews</a>
+            </nav>
+            </div>
     {% else %}
-        <div class="navdiv">
+        <div class="navDiv">
         <nav>
             <a href="/" class="logo">TOAST</a>
-            <a href="/login" class="navoption">Login </a>
-            <a href="/signup" class="navoption">Signup </a>
-            <a href="/" class="navoption">Reviews</a>
+            <a href="/login" class="navOption">Login </a>
+            <a href="/signup" class="navOption">Signup </a>
+            <a href="/create_reviews" class="navOption">Create review</a>
+            <a href="/" class="navOption">Reviews</a>
         </nav>
         </div>
     {% endif %}
@@ -34,8 +47,10 @@
             {% endblock %}
         </main>
 
-        <footer class="footerdiv">
-            <p>&copy;Jessica Fu, 2024</p>
+        <footer>
+            <div class="footerdiv">
+            <p>&copy;Jessica Fu, 2024 <br>Contact me at: 21492@burnside.school.nz</p>
+            </div>
         </footer>
     </body>
 </html>

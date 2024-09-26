@@ -1,14 +1,14 @@
 {% extends 'layout.html' %}
 {% block main -%}
-<img class="headingimage" width="100%" height="400px" src="/static/images/please.jpeg" alt="toastheader">
-<div class="headingtext" >Read Toast Reviews</div>
-<p class="website-description">This is a website for toast lovers that want to try new spreads or give their take on certain combinations of toast toppings.<br>Sign up or log in to start creating your own reviews.</p>
+<img class="headingImage" width="100%" height="400px" src="/static/images/please.jpeg" alt="toastheader">
+<div class="headingText" >Read Toast Reviews</div>
+<p class="websiteDescription">This is a website for toast lovers that want to read about what people think about toast spreads or give their take on certain combinations of toast toppings.<br>Sign up or log in to start creating your own reviews.</p>
 <div class="allRevGridContainer">
     {% for review in reviews %}
     {% if loop.previtem is undefined or loop.previtem is defined and review[0] != loop.previtem[0] %}
-    <div class="headingsfortoast">
+    <div class="headingsForToast">
     {{ review[1] }}
-    <div class="headingsimage">
+    <div class="headingsImage">
        <img src="{{ review[4] }}" width="300px" height="240px" alt="toastimage">
     </div>
     </div>

@@ -1,7 +1,7 @@
 {% extends 'layout.html' %}
    {% block main -%}
    {% if reviews == [] %}
-    <div class="norevgridcontainer">
+    <div class="noRevGridContainer">
     <h1>{{ username }}'s Reviews</h1>
     {% with messages = get_flashed_messages() %}
     {% if messages %}
@@ -11,7 +11,7 @@
     {% endif %}
    {% endwith %}
     <div class="myRevGridItem">
-    <div class="norevtext">You have no reviews :C</div>	
+    <div class="noRevText">You have no reviews :C<br> Want to create a review? <br><a href="/create_reviews">Create</a></div>	
     <img  height="400px" width="400px" alt="toastwitheyes" src="/static/images/A_piece_of_toast_with_eyes.jpg">
     </div>
 </div>
@@ -21,24 +21,26 @@
 {% with messages = get_flashed_messages() %}
 {% if messages %}
    {% for message in messages %}
-      {{ message }}
+      <p><b>{{ message }}</b></p>
+      <br>
    {% endfor %}
 {% endif %}
 {% endwith %}
      {% for review in reviews %}
      <div class="myRevGridItem">
-        <div class="myrevphoto">
+        <div class="myRevPhoto">
             <img height="300px" width="400px" alt="toastphoto" src="{{review[3]}}">
         </div>
-        <div class="myrevtext">
+        <div class="myRevText">
             <br>
             {{ review[0] }}
             <br>
             {{ review[1] }}
             <br><br>
             <form action="/my_reviews" method="post">
-            <input type="hidden" name="review_id" value="{{review[2]}}">
-            <input type="submit" value="Delete">
+               <input type="hidden" name="review_id" value="{{review[2]}}">
+               <input type="submit" name="Update_review" value="Update" class="myRevButtons">
+               <input type="submit" name="Delete_review" value="Delete" class="deleteButton">
             </form>
         </div>
     </div>
