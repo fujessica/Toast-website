@@ -1,5 +1,13 @@
 {% extends 'layout.html' %}
 {% block main -%}
+{% if reviews == [] %}
+<div class="adminContainer">
+    <h1>Approvals</h1>
+    <div>
+        No reviews pending :C
+    </div> 
+</div>
+{% else %}
 <div class="adminContainer">
     <h1>Approvals</h1>
     <div class="adminGroups">
@@ -8,10 +16,11 @@
         <div id="adminReview" class="adminItems">{{review[2]}}</div>
         <form action="/admin" method="post" class="adminItems">
             <input name="review_id" type="hidden" value="{{review[0]}}"></input>
-            <input type="submit" name="Update_review" value="Approve" id="approveButton"></input>
-            <input type="submit" name="Delete_review" value="Delete" class="deleteButton">
+            <input type="submit" name="update_review" value="Approve" id="approveButton"></input>
+            <input type="submit" name="delete_review" value="Delete" class="deleteButton">
         </form>
     {%- endfor %}
     </div> 
 </div>
+{% endif %}
 {%- endblock %}

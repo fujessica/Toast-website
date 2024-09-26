@@ -76,7 +76,7 @@ def signup():
                 session['user_id'] = sql_queries(query, 0, (username,)
                                                  )[0]
                 # setting up admin for the changing navbar
-                session['admin'] = 0
+                session['admin'] = "0"
                 return redirect(url_for('my_reviews'))
         elif has_numbers(password) is False:
             flash('Password must contain 1 number')
@@ -132,7 +132,7 @@ def my_reviews():
                                    reviews=reviews,
                                    username=session['username'])
     if request.method == 'POST':
-        if 'Delete_review' in request.form:
+        if 'delete_review' in request.form:
             query = "SELECT user_id FROM Reviews WHERE id = ?"
             review_user = sql_queries(query, 0,
                                       (request.form['review_id'], ))[0]
@@ -146,7 +146,7 @@ def my_reviews():
             else:
                 flash('This is not your review')
                 return redirect(url_for("my_reviews"))
-        elif 'Update_review' in request.form:
+        elif 'update_review' in request.form:
             # making session['review_id'] becauase I need it for the update
             # reviews page
             session['review_id'] = request.form['review_id']
@@ -242,9 +242,9 @@ def update_reviews():
 @app.route('/admin', methods=['POST', 'GET'])
 def admin():
     if 'admin' in session:
-        if session['admin'] == 0:
+        if session['admin'] == "0":
             return redirect(url_for('show_all_reviews'))
-        elif session['admin'] == '1':
+        elif session['admin'] == "1":
             if request.method == 'GET':
                 query = "SELECT r.id, u.username, r.review \
                         FROM reviews AS r JOIN users AS u \
@@ -252,11 +252,11 @@ def admin():
                 reviews = sql_queries(query, 1)
                 return render_template('admin.html', reviews=reviews)
             elif request.method == 'POST':
-                if 'Update_review' in request.form:
+                if 'update_review' in request.form:
                     query = "UPDATE Reviews SET approval = 1 WHERE id = ?"
                     sql_queries(query, 2, (request.form['review_id'], ))
                     return redirect(url_for('admin'))
-                elif 'Delete_review' in request.form:
+                elif 'delete_review' in request.form:
                     query = "DELETE FROM Reviews WHERE id = ?"
                     sql_queries(query, 2, (request.form['review_id'], ))
                     return redirect(url_for('admin'))
